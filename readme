@@ -1,0 +1,65 @@
+// L'enum type t_direction les textures murales pour chaque direction
+
+// Le struct t_vector est utilise pour representer des coordonnes (x, y)
+// en 2D; donc un vecteur directionnel
+// Pour ses champs x et y on va utiliser le type double car 
+// On a beson de plus de precision.
+
+// La structure t_palyer represente le joueur; en fait sa  position de 
+// depart; la direction dans laquelle il regarde; et son champ de vision
+// pos: Position du joueur dans le map par (ex: x = 4.5, y = 2.5)
+// dir: Direction dans laquelle le joueur regarde (ex: (1, 0) vers l'ESt)
+// plane: Vecteur "plan camera" (perpendiculaire a sa dir), pour le FOV
+
+// La struct t_mlx:
+// mlx_ptr:	Pointeur vers l’instance globale MiniLibX, obtenu avec mlx_init()
+// win_ptr: Pointeur vers la fenêtre créée, obtenu avec mlx_new_window()
+// img_ptr: Pointeur vers l’image (buffer graphique) créée avec mlx_new_image()
+// addr: Adresse mémoire du début des pixels dans l’image (pour y écrire les couleurs)
+// bits_per_pixel:	Nombre de bits utilisés pour représenter un pixel (souvent 32)
+// ine_length:	Nombre d’octets (bytes) utilisés pour stocker une ligne complète de pixels
+// endian:	Indique l’ordre des octets dans chaque pixel (0 = little endian, 1 = big endian)
+
+// La structure t_map represente le plan 2D donc notre carte
+// grid: notre plan en 2D ou notre carte
+// width: largeur donc l'axe horizontale (x) de notre plan
+// height: longueur donc l'axe vertical (y) de notre plan
+
+// la structure textures contient toutes 
+// les textures murales(Nord, Sud, Est, Ouest) donc les textures utilses
+// pour l'affichage des murs.
+// chargees depuis des fichiers .xpm(format d'image utilise avec MiniLibX)
+// img est l' image originale des textures(N, S, E, O)
+// data est obtenu avec mlx_get_data_addr() pour
+// acceder aux couleurs des pixels et faire du texturage manuel (raycasting avec testures)
+// donc l'acces brut a chaque pixe.
+// width et height representent respectivement la largeur et la hauteur de chaque texture
+// Un pixel (picture element) est le plus petit point colore qui compose une image a l'ecran.
+// Les donnees brutes d'une image, ce sont les valeurs exactes des pixels d'une image, 
+// stockees en memoire sans traitement, ni affichage.
+// Quand tu charges une texture .xpm avec mlx_xpm_file_to_image(); tu obtiens une image MLX.
+// Mais si tu veux lire la couleur de chauqe pixel individuellement (pour faire le renud 3D)
+// tu dois acceder a ses donnees brutes via mlx_get_data_addr()
+// Donc ici par ex: no_img va representer image mlx obtenu avec mlx_xpm_file_to_image()
+// et no_data contient un tableau brut de tous les pixels de l'image ou chauqe pixel est
+// entier(int) representant une couleur comme: 
+// 0x00FF00 = vert
+// 0xFFFFFF = blanc
+// 0x000000 = noir
+// Donc notre tableau est a 1D; donc pour recuperer une couleur ou un pixel donne on fait:
+// color = no_data[width * y  + x]. C’est la façon standard d’accéder à un pixel (x, y) 
+// dans un tableau 1D (linéaire) qui représente une image 2D.
+// 📦 Pourquoi un tableau 1D ?
+// En mémoire, une image est souvent stockée comme une liste continue de pixels, 
+// ligne par ligne, pas comme un tableau 2D.
+// Donc, il faut convertir une position 2D (x, y) en indice 1D.
+// 💡 Comment ça marche ?
+// width : nombre de pixels par ligne
+// y : quelle ligne on veut
+// x : quelle colonne dans cette ligne
+// 🧠 Donc :
+// index = y * width + x;
+// Ça te donne la position exacte du pixel (x, y) dans le tableau data.
+// On ne peut acceder directement a un pixel comme dans un vrai tableau 2D
+// Parceque mlx au bas niveau en C stocke les donnees brutes en 1D dans un tableau
+// lineaire
