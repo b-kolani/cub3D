@@ -9,6 +9,7 @@ int	main(int ac, const char **av)
 {
 	t_game	*game;
 
+
 	if (ac != 2)
 		return (print_err("Usage: ./cub3D <map>.cub\n"));
 	game = ft_calloc(1, sizeof(t_game));
