@@ -18,14 +18,23 @@
 // Pour les portes et sprites
 // # define MAX_SPRITES 64
 // # define MAX_DOORS 32
-# define ENEMY_TYPE 0
+// # define ENEMY_TYPE 0
+# define WALL_TYPE 0
 # define DOOR_TYPE 1
 # define ITEM_TYPE 2
 # define SPRITE_TYPE_COUNT 3
 # define ENEMY_FRAMES 8
 # define ITEM_FRAMES 7
-# define DOOR_FRAMES 1
+# define DOOR_FRAMES 2
 # define MAX_FRAMES_PER_SPRITE 30
+
+# define CELL_SIZE 10// Taille d'une case sur le mini-map
+# define ITEM_CELL_SIZE 5
+# define PLAYER_CELL_SIZE 5
+# define DOOR_CELL_SIZE 5
+# define START_PIXEL_X 1
+# define START_PIXEL_Y 1
+// # define TILE_SIZE 10
 
 // Pour le rendu
 # define HEIGHT 720
@@ -33,8 +42,13 @@
 
 typedef enum e_texture { NORTH, SOUTH, WEST, EAST }	t_texture;
 
+// # define VERTICAL 0
+// # define HORIZONTAL 1
+
 // STRUCT POUR LES SPRITES
+
 typedef struct	s_sprite {
+	// char	item;
 	int		type; // 2, 3 etc.
 	double	x;
 	double	y;
@@ -52,25 +66,15 @@ typedef struct	s_sprite {
 	int		draw_start_x;
 	int		draw_end_x;
 	int		sprite_screen_x;
-	bool	active; // optionnel: pour désactivé le sprite si ramassé
+	bool		active; // optionnel: pour désactivé le sprite si ramassé
+	bool		is_open;
 }	t_sprite;
 
-// STRUCT POUR LES PORTES
-typedef struct	s_door {
-	int		type;
-	double	x;
-	double	y;
-	double	transform_x;
-	double	transform_y;
-	int		sprite_height;
-	int		draw_start_y;
-	int		draw_end_y;
-	int		sprite_width;
-	int		draw_start_x;
-	int		draw_end_x;
-	// double	anim_timer; // Pour l'animation d'ouverture des portes.
-	bool	is_open;
-}	t_door;
+typedef struct	s_item {
+	t_sprite	sprite;
+	bool		active; // optionnel: pour désactivé le sprite si ramassé
+}	t_item;
+
 
 // STRUCT FOR A VERTICAL LINE WHEN A RAY TOUCH A WALL
 typedef struct s_draw {
@@ -97,6 +101,40 @@ typedef struct s_map {
 	int		height;
 }	t_map;
 
+typedef struct s_img {
+	void	*img_ptr; // Image créee en mémoire avec mlx_new_image
+	char	*img_data_addr; // Pointeur vers les donnees de l'img en memoire img_data_addr
+	int		bits_per_pixel; // Nombre de bits par pixel
+	int		line_length; // Nombre d'octets par ligne
+	int		endian; // ordere des octets (endiannas)
+	int		width;
+	int		height;
+	int		tex_x;
+	int		tex_y;
+	double	tex_pos;
+	double	step;
+	// int		tex_dir;
+}	t_img;
+
+// STRUCT POUR LES PORTES
+typedef struct	s_door {
+	int			type;
+	double		x;
+	double		y;
+	int			anim_index;
+	int			state; // 0 fermée, 1 ouverte, 2 fermée, 3 ouverte
+	float 		door_offset; // Ceci représente l'état d'une porte on utilise 
+	// float pour une ouverture fluide ou progressive; avec un int on a une ouverture
+	// brusque et ce n'est pas le comportement voulu
+	t_img		tex;
+	t_vector	dir;
+	// int			pos_on_mini_map;
+	bool		is_open;
+	int			current_frame;
+	float 		anim_timer; // Temps écoulé pour l'animation
+	int			side_hit;
+}	t_door;
+
 typedef	struct s_config {
 	char			*no;
 	char			*so;
@@ -121,20 +159,6 @@ typedef	struct s_config {
 	double			*z_buffer;
 }	t_config;
 
-typedef struct s_img {
-	void	*img_ptr; // Image créee en mémoire avec mlx_new_image
-	char	*img_data_addr; // Pointeur vers les donnees de l'img en memoire img_data_addr
-	int		bits_per_pixel; // Nombre de bits par pixel
-	int		line_length; // Nombre d'octets par ligne
-	int		endian; // ordere des octets (endiannas)
-	int		width;
-	int		height;
-	int		tex_x;
-	int		tex_y;
-	double	tex_pos;
-	double	step;
-	// int		tex_dir;
-}	t_img;
 
 typedef	struct s_mlx {
 	void	*mlx_ptr; // pointeur mlx global (le contexte) cree lors de la connexion avec le serveur grahique x11
@@ -156,6 +180,10 @@ typedef struct s_ray {
 	int			side; // Quel cote du mur a ete touche 0 pour le cote X (vertical: Est ou Ouest) et 1 pour le cote Y (horizontal: Haut ou Bas)
 	t_draw		column;
 	int			texture_id; // Ceci vaut 0 ou 1 ou 2 ou 3 dû au nombre de textures disponibles.
+	int			text_type;
+	int			door_x;
+	int			door_y;
+	t_door		*door_hit;
 }	t_ray;
 
 // FOR KEYS POUR MEMORISER LES TOUCHES PRESSES 
@@ -168,6 +196,7 @@ typedef struct s_keys {
 	int d;
 	int	left;
 	int	right;
+	int	enter;
 }	t_keys;
 
 // MEMORY MANAGEMENT FUNCTIONS AND GARBAGE COLLECTOR
@@ -186,11 +215,21 @@ typedef	struct s_game {
 	t_mlx		mlx; 	// Graphismes mlx
 	t_gc		*gc;
 	t_img		textures[4]; // Tableau de 4 textures N, S, E, W
+	t_img		door_textures[2];
 	t_img 		sprite_textures[SPRITE_TYPE_COUNT][MAX_FRAMES_PER_SPRITE];
 	int			sprites_frames_count[SPRITE_TYPE_COUNT];
 	t_keys		keys;
 	double		move_speed;
 	double		rot_speed;
+	int			last_x; // Dernière Position horizontale de la souris 
+	// Pour la rotation par le mouvement de la souris
+	// int			center_x;
+	// int			center_y;
+	int			g_mouse_lock; // Pour capturer le curseur dans le fenêtre 
+	// C'est à dire activer/désactiver la capture de la souris
+	// Pour pouvoir sortir de la fenêtre et interagir avec d'autres 
+	// éléments extérieurs et revenir dans la fenêtre de jeu
+	t_door		*door_in_front_of_player;
 }	t_game;
 
 // MEMORY MANAGEMENT
@@ -245,6 +284,7 @@ int		init_mlx(t_mlx *mlx_);
 int		draw_background(t_game *game);
 int		put_pixel(t_img *img, int x, int y, int color);
 int		get_texture_pixels(t_img* tex, int x, int y);
+int		draw_mini_map(t_game *game);
 
 // RAYCASTING FUNCTIONS
 int		raycasting(t_game *game);
@@ -255,7 +295,7 @@ void	compute_projection(t_ray *ray);
 int		draw_column(t_ray *ray, t_game *game, int x);
 // void    cast_single_ray(t_game *game, int x);
 
-// PLAYER MOVEMENTS
+// PLAYER AND ENEMYS MOVEMENTS AND EVENTS
 int		update_player(t_game *game);
 int		key_press(int keycode, t_game *game);
 int		key_release(int keycode, t_game *game);
@@ -263,10 +303,16 @@ void	move_forward(t_game *game);
 void	move_backward(t_game *game);
 void	strafe_left(t_game *game);
 void	strafe_right(t_game *game);
+int 	mouse_move_handler(int x, int y, t_game *game);
+int 	mouse_click_handler(int button, int x, int y, t_game *game);
+void	move_enemies(t_game *game);
+// void	update_enemy_position(t_game *game, t_sprite *enemy);
 
 // ROTATE CAMERA
 void	rotate_left(t_game *game);
 void	rotate_right(t_game *game);
+// void    mouse_rotate_left(t_game *game, int rot_speed);
+// void    mouse_rotate_right(t_game *game, int rot_speed);
 
 // CLOSE GAME
 int close_window(t_game *game);
@@ -274,5 +320,10 @@ int close_window(t_game *game);
 // LOAD TEXTURES FUNCTION
 void    load_wall_all_tex(t_game *game);
 void    load_all_sprites_tex(t_game *game);
+void    load_door_all_text(t_game *game);
+
+// DOORS UTILS
+t_door *find_door(t_config *config, int map_x, int map_y);
+t_door  *get_door_in_front_of_player(t_config *config);
 
 #endif

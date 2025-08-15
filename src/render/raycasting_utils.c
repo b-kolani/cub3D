@@ -68,7 +68,7 @@ t_img *get_dir_texture(t_ray *ray, t_img *textures)
     return (&textures[tex_dir]);
 }
 
-int initialize_texture(t_ray *ray, t_img *texture)
+int initialize_texture(t_ray *ray, t_img *texture, t_config *config)
 {
     double wall_x;
 
@@ -77,9 +77,11 @@ int initialize_texture(t_ray *ray, t_img *texture)
         "texture initialization failed\n"));
     //  Calcul de wall_x et tex_x
     if (ray->side == 0)
-        wall_x = ray->map_y + ray->perp_wall_dist * ray->ray_dir.y;
+        wall_x = config->player.pos.y + ray->perp_wall_dist * ray->ray_dir.y;
+        // wall_x = ray->map_y + ray->perp_wall_dist * ray->ray_dir.y;
     else
-        wall_x = ray->map_x + ray->perp_wall_dist * ray->ray_dir.x;
+        wall_x = config->player.pos.x + ray->perp_wall_dist * ray->ray_dir.x;
+        // wall_x = ray->map_x + ray->perp_wall_dist * ray->ray_dir.x;
     wall_x -= floor(wall_x); // On ne garde que la partie décimale
     texture->tex_x = (int)(wall_x * texture->width);
     if ((ray->side == 0 && ray->ray_dir.x > 0)
@@ -104,7 +106,7 @@ int draw_column(t_ray *ray, t_game *game, int x)
         ray->column.draw_start = 0;
     if (ray->column.draw_end >= HEIGHT)
         ray->column.draw_end = HEIGHT - 1;
-    if (initialize_texture(ray, texture))
+    if (initialize_texture(ray, texture, &game->config))
         return (-1);
     // 5. Boucle de dessin
     y = ray->column.draw_start;
