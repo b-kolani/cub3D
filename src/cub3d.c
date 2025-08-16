@@ -2,12 +2,13 @@
 
 void	detect_leaks()
 {
-	system("leak cub3D");
+	system("leaks cub3D");
 }
 
 int	main(int ac, const char **av)
 {
 	t_game	*game;
+	char *s = malloc(sizeof(char *));
 
 
 	if (ac != 2)

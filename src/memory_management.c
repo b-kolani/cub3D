@@ -40,7 +40,7 @@ void    *gc_malloc(t_gc *gc, size_t size)
 
 void    gc_free(t_game *game)
 {
-    t_gc_node    *tmp;
+    // t_gc_node    *tmp;
 
     if (!game || !game->gc)
         return ;
