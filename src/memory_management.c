@@ -3,7 +3,7 @@
 void    gc_free_all(t_gc *gc)
 {
     t_gc_node *tmp;
-    while(gc && !gc->head)
+    while(gc && gc->head)
     {
         tmp = gc->head->next;
         free(gc->head->ptr);
@@ -48,3 +48,5 @@ void    gc_free(t_game *game)
 
     free(game);
 }
+
+

@@ -10,6 +10,7 @@ int	main(int ac, const char **av)
 	t_game	*game;
 	char *s = malloc(sizeof(char *));
 
+	atexit(detect_leaks);
 
 	if (ac != 2)
 		return (print_err("Usage: ./cub3D <map>.cub\n"));
@@ -22,8 +23,8 @@ int	main(int ac, const char **av)
 	game->gc->head = NULL;
 	if (parse_cub3d_map(&game->config, game->gc, av[1]))
 	{
-		// gc_free(game);
-		// return (-1);
+		gc_free(game);
+		return (-1);
 	}
 	if (rendering(game))
 	{
@@ -31,6 +32,6 @@ int	main(int ac, const char **av)
 		return (-1);
 	}
 	gc_free(game);
-	atexit(detect_leaks);
+	
 	return (0);
 }
