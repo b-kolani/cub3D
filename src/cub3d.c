@@ -21,8 +21,8 @@ int	main(int ac, const char **av)
 	game->gc->head = NULL;
 	if (parse_cub3d_map(&game->config, game->gc, av[1]))
 	{
-		gc_free(game);
-		return (-1);
+		// gc_free(game);
+		// return (-1);
 	}
 	if (rendering(game))
 	{

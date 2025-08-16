@@ -4,8 +4,8 @@ static int set_config(t_config *config, t_gc *gc, size_t map_len)
 {
     config->map.grid = gc_malloc(gc, sizeof(char *) * (map_len + 1));
     config->map.height = map_len;
-    if (!config->map.grid)
-        return (print_err("gc_malloc error: grid allocation failed!\n"));
+    // if (!config->map.grid)
+    //     return (print_err("gc_malloc error: grid allocation failed!\n"));
     return (0);
 }
 

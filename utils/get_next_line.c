@@ -6,8 +6,8 @@ char	*read_and_store(int fd, char *backup, t_gc *gc)
 	char	*buffer;
 
 	buffer = gc_malloc(gc, ((size_t)BUFFER_SIZE + 1) * sizeof(char));
-	if (!buffer)
-		return (NULL);
+	// if (!buffer)
+	// 	return (NULL);
 	bytes_read = 1;
 	while (!ft_strchr(backup, '\n') && bytes_read != 0)
 	{
@@ -34,8 +34,8 @@ char	*reset_backup(char *backup, t_gc *gc)
 	if (backup[i] == '\n')
 		i += 1;
 	new_backup = gc_malloc(gc, (ft_strlen(backup) - i + 1) * sizeof(char));
-	if (!new_backup)
-		return (NULL);
+	// if (!new_backup)
+	// 	return (NULL);
 	j = 0;
 	while (backup[i])
 		new_backup[j++] = backup[i++];
@@ -58,8 +58,8 @@ char	*extract_line(char *backup, t_gc *gc)
 	if (backup[i] == '\n')
 		i += 1;
 	str_line = (char *)gc_malloc(gc, (i + 1) * sizeof(char));
-	if (!str_line)
-		return (NULL);
+	// if (!str_line)
+	// 	return (NULL);
 	while (j < i && backup[j])
 	{
 		str_line[j] = backup[j];
@@ -77,8 +77,8 @@ char	*get_next_line(int fd, t_gc *gc)
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	backup = read_and_store(fd, backup, gc);
-	if (!backup)
-		return (NULL);
+	// if (!backup)
+	// 	return (NULL);
 	line = extract_line(backup, gc);
 	backup = reset_backup(backup, gc);
 	return (line);

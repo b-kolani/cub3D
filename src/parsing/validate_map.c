@@ -87,8 +87,8 @@ static int  normalized(char **config_map, char **tmp, t_gc *gc, size_t max_len)
     while (config_map[++i])
     {
         tmp[i] = gc_malloc(gc, max_len + 1);
-        if (!tmp[i])
-            return (print_err("gc_malloc error: tmp allocation failed\n"));
+        // if (!tmp[i])
+        //     return (print_err("gc_malloc error: tmp allocation failed\n"));
         j = -1;
         while (config_map[i][++j])
             tmp[i][j] = config_map[i][j];
@@ -119,8 +119,8 @@ int validate_map(t_config *config, t_gc *gc, size_t map_len)
     }
     config->map.width = max_len;
     tmp = gc_malloc(gc, sizeof(char *) * (map_len + 1));
-    if (!tmp)
-        return (print_err("Allocation failed\n"));
+    // if (!tmp)
+    //     return (print_err("Allocation failed\n"));
     if (normalized(config->map.grid, tmp, gc, max_len))
         return (-1);
     if (find_player_position(config, tmp))

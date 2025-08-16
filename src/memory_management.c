@@ -1,5 +1,17 @@
 #include "../includes/cub3d.h"
 
+void    gc_free_all(t_gc *gc)
+{
+    t_gc_node *tmp;
+    while(gc && !gc->head)
+    {
+        tmp = gc->head->next;
+        free(gc->head->ptr);
+        free(gc->head);
+        gc->head = tmp;
+    }
+    free(gc);
+}
 void    *gc_malloc(t_gc *gc, size_t size)
 {
     void        *ptr;
@@ -7,12 +19,18 @@ void    *gc_malloc(t_gc *gc, size_t size)
 
     ptr = malloc(size);
     if (!ptr)
-        return (NULL);
+    {
+        gc_free_all(gc);
+        print_err("Error: memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
     gc_node = malloc(sizeof(t_gc_node));
     if (!gc_node)
     {
         free(ptr);
-        return (NULL);
+        gc_free_all(gc);
+        print_err("Error: memory allocation failed\n");
+        exit(EXIT_FAILURE);
     }
     gc_node->ptr = ptr;
     gc_node->next = gc->head;
@@ -24,15 +42,9 @@ void    gc_free(t_game *game)
 {
     t_gc_node    *tmp;
 
-    if (!game->gc)
+    if (!game || !game->gc)
         return ;
-    while (game->gc->head)
-    {
-        tmp = game->gc->head->next;
-        free(game->gc->head->ptr);
-        free(game->gc->head);
-        game->gc->head = tmp;
-    }
-    free(game->gc);
+    gc_free_all(game->gc);
+
     free(game);
 }

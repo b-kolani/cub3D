@@ -7,8 +7,6 @@ char	*ft_strdup(const char *s, t_gc *gc)
 
 	s_len = ft_strlen(s);
 	cpy = gc_malloc(gc, s_len + 1);
-	if (!cpy)
-		return (NULL);
 	ft_strlcpy(cpy, s, s_len + 1);
 	return (cpy);
 }

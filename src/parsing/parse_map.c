@@ -12,8 +12,7 @@ static char **read_map_file_lines(const char *filename, t_gc *gc)
     if (fd == -1)
         return (NULL);
     lines = gc_malloc(gc, sizeof(char *) * 2048);
-    if (!lines)
-        return (NULL);
+
     line = NULL;
     i = -1;
     while ((line = get_next_line(fd, gc)) && i < 2047)
@@ -33,10 +32,8 @@ int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
     if (ft_strncmp(filename + (ft_strlen(filename) - 4), ".cub", 4))
         return (print_err("File error: invalid file; need .cub extension file\n"));
     lines = read_map_file_lines(filename, gc);
-    if (!lines)
-        return (print_err("Map error: Failed when getting map lines!\n"));
     if (parse_elements(config, gc, lines, &map_desc_len)
-        || validate_config(config, gc) 
+        || validate_config(config, gc)
         || validate_map(config, gc, map_desc_len))
         return (-1);
     config->map.grid[(int)config->player.pos.y][(int)config->player.pos.x] = '0';
