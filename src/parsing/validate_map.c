@@ -119,8 +119,8 @@ int validate_map(t_config *config, t_gc *gc, size_t map_len)
     }
     config->map.width = max_len;
     tmp = gc_malloc(gc, sizeof(char *) * (map_len + 1));
-    // if (!tmp)
-    //     return (print_err("Allocation failed\n"));
+    if (!tmp)
+        return (print_err("Allocation failed\n"));
     if (normalized(config->map.grid, tmp, gc, max_len))
         return (-1);
     if (find_player_position(config, tmp))

@@ -8,7 +8,6 @@ void	detect_leaks()
 int	main(int ac, const char **av)
 {
 	t_game	*game;
-	char *s = malloc(sizeof(char *));
 
 	atexit(detect_leaks);
 
