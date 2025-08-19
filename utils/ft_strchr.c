@@ -2,7 +2,7 @@
 
 char	*ft_strchr(const char *str, int c)
 {
-	if (!str)
+	if (!str || !c)
 		return (NULL);
 	while (*str && *str != c)
 		str++;

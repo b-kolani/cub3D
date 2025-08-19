@@ -36,6 +36,10 @@
 # define START_PIXEL_Y 1
 // # define TILE_SIZE 10
 
+// POur le fov sur la mini map
+# define FOV (M_PI / 3) // Calcul l'angle du cône qui représente le FOV
+// sur la mini map ici 60 dégré en radian
+
 // Pour le rendu
 # define HEIGHT 720
 # define WIDTH 1280
@@ -46,6 +50,23 @@ typedef enum e_texture { NORTH, SOUTH, WEST, EAST }	t_texture;
 // # define HORIZONTAL 1
 
 // STRUCT POUR LES SPRITES
+
+typedef struct s_fov {
+	int     x;
+	int		y;
+	double	dx;
+	double	dy;
+	int		px;
+	int		py;
+	double	player_angle;
+	int		intersection;
+	double	start_angle;
+	double	end_angle;
+	double	step;
+	int		map_x;
+	int		map_y;
+	double range;
+}	t_fov;
 
 typedef struct	s_sprite {
 	// char	item;
@@ -230,6 +251,7 @@ typedef	struct s_game {
 	// Pour pouvoir sortir de la fenêtre et interagir avec d'autres 
 	// éléments extérieurs et revenir dans la fenêtre de jeu
 	t_door		*door_in_front_of_player;
+	t_fov		mini_map_fov;
 }	t_game;
 
 // MEMORY MANAGEMENT
