@@ -12,7 +12,6 @@ static char **read_map_file_lines(const char *filename, t_gc *gc)
     if (fd == -1)
         return (NULL);
     lines = gc_malloc(gc, sizeof(char *) * 2048);
-
     line = NULL;
     i = -1;
     while ((line = get_next_line(fd, gc)) && i < 2047)

@@ -87,8 +87,6 @@ static int  normalized(char **config_map, char **tmp, t_gc *gc, size_t max_len)
     while (config_map[++i])
     {
         tmp[i] = gc_malloc(gc, max_len + 1);
-        // if (!tmp[i])
-        //     return (print_err("gc_malloc error: tmp allocation failed\n"));
         j = -1;
         while (config_map[i][++j])
             tmp[i][j] = config_map[i][j];
@@ -102,6 +100,7 @@ static int  normalized(char **config_map, char **tmp, t_gc *gc, size_t max_len)
 
 
 // Valider la carte
+// check if the map surounded by walls 
 int validate_map(t_config *config, t_gc *gc, size_t map_len)
 {
     int i;
@@ -128,8 +127,5 @@ int validate_map(t_config *config, t_gc *gc, size_t map_len)
     if (!flood_fill(config, tmp, config->player.pos.x, 
         config->player.pos.y) || detect_map_leaks(config, tmp))
         return (print_err("Map error: leak detected on the map!\n"));
-    // i = -1;
-    // while (tmp[++i])
-    //     printf("%s\n", tmp[i]);
     return (0);
 }
