@@ -96,30 +96,44 @@ int handle_config_line_err(t_config *config, t_gc *gc, char *line, int map_start
     return (0);
 }
 
-int iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
+int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 {
-    int i;
-    int map_started;
+	int		i;
+	int		map_started;
+	int		first_map_line;
+	int		last_map_line;
 
-    i = -1;
-    map_started = 0;
-    while(lines[++i])
-    {
-        if (is_map_config_line(lines[i]))
-        {
-            if (handle_config_line_err(config, gc, lines[i], map_started))
-                return (-1); 
-        }
-        else if (is_map_desc_line(lines[i]))
-        {
-            if (map_started == 0)
-                map_started = 1;
-            (*map_len)++;
-        }
-        else if (!is_empty_line(lines[i]))
-            return (print_err("Map error: Invalid configuration line!\n"));
-    }
-    return (0);
+	i = -1;
+	map_started = 0;
+	first_map_line = -1;
+	last_map_line = -1;
+	
+	while (lines[++i])
+	{
+		if (is_map_config_line(lines[i]))
+		{
+			if (handle_config_line_err(config, gc, lines[i], map_started))
+				return (-1);
+		}
+		else if (is_map_desc_line(lines[i]))
+		{
+			if (map_started == 0)
+				map_started = 1;
+			if (first_map_line == -1)
+				first_map_line = i;
+			last_map_line  = i;
+			(*map_len)++;
+		}
+		else if (!is_empty_line(lines[i]))
+		{
+			return (print_err("Map error: Invalid configuration line!\n"));
+		}
+	}
+	if (*map_len > 0 && *map_len != (size_t)(last_map_line - first_map_line + 1))
+	{
+		return (print_err("Map error: Empty lines inside map description!\n"));
+	}
+	return (0);
 }
 
 int parse_elements(t_config *config, t_gc *gc, char **lines, size_t *map_len)
