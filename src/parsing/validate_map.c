@@ -54,10 +54,12 @@ int find_player_position(t_config *config, char **tmp_map)
     char    *player_pos_line;
 
     i = -1;
+    int j = -1;
     player = 0;
     player_pos_line = NULL;
     while (tmp_map[++i])
     {
+
         if (ft_strchr(tmp_map[i], 'N') || ft_strchr(tmp_map[i], 'S')
         || ft_strchr(tmp_map[i], 'E') || ft_strchr(tmp_map[i], 'W'))
         {
@@ -67,7 +69,7 @@ int find_player_position(t_config *config, char **tmp_map)
             config->player.pos.y = i + 0.5;
         }
     }
-    player_pos_line = tmp_map[(int)config->player.pos.y];
+    player_pos_line = tmp_map[(int)config->player.pos.y]; 
     set_player_x_pos(config, player_pos_line);
     set_player_orientation(&config->player, player_pos_line);
     return (0);
@@ -118,8 +120,6 @@ int validate_map(t_config *config, t_gc *gc, size_t map_len)
     }
     config->map.width = max_len;
     tmp = gc_malloc(gc, sizeof(char *) * (map_len + 1));
-    if (!tmp)
-        return (print_err("Allocation failed\n"));
     if (normalized(config->map.grid, tmp, gc, max_len))
         return (-1);
     if (find_player_position(config, tmp))
