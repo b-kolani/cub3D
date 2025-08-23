@@ -24,7 +24,7 @@
 # define ITEM_TYPE 2
 # define SPRITE_TYPE_COUNT 3
 # define ENEMY_FRAMES 8
-# define ITEM_FRAMES 7
+# define ITEM_FRAMES 12
 # define DOOR_FRAMES 2
 # define MAX_FRAMES_PER_SPRITE 30
 

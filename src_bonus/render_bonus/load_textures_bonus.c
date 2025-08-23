@@ -119,13 +119,18 @@ void    load_all_sprites_tex(t_game *game)
     //     "sprites/sonic_7.xpm"
     // };
     char    *item_sprites[ITEM_FRAMES] = {
-        "sprites/coin_0.xpm",
-        "sprites/coin_1.xpm",
-        "sprites/coin_2.xpm",
-        "sprites/coin_3.xpm",
-        "sprites/coin_4.xpm",
-        "sprites/coin_5.xpm",
-        "sprites/coin_6.xpm"
+        "sprites/1.xpm",
+        "sprites/2.xpm",
+        "sprites/3.xpm",
+        "sprites/4.xpm",
+        "sprites/5.xpm",
+        "sprites/6.xpm",
+        "sprites/7.xpm",
+        "sprites/8.xpm",
+        "sprites/9.xpm",
+        "sprites/10.xpm",
+        "sprites/11.xpm",
+        "sprites/12.xpm"
     };
     // char    *door_sprites[DOOR_FRAMES] = {
     //     "sprites/door_closed.xpm",
