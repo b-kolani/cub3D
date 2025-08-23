@@ -14,8 +14,8 @@ int flood_fill(t_config *config, char **tmp_map, int x, int y)
         return (0);
     if (tmp_map[y][x] == '1' || tmp_map[y][x] == 'F')
         return (1);
-    tmp_map[y][x] = 'F';
-    return (flood_fill(config, tmp_map, x - 1, y) &&
+    tmp_map[y][x] = 'F'; 
+    return (flood_fill(config, tmp_map, x - 1, y) && 
             flood_fill(config, tmp_map, x, y + 1) &&
             flood_fill(config, tmp_map, x + 1, y) &&
             flood_fill(config, tmp_map, x, y - 1));

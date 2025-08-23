@@ -124,8 +124,8 @@ int validate_map(t_config *config, t_gc *gc, size_t map_len)
         return (-1);
     if (find_player_position(config, tmp))
         return (-1);
-    if (!flood_fill(config, tmp, config->player.pos.x, 
-        config->player.pos.y) || detect_map_leaks(config, tmp))
+    if (!flood_fill(config, tmp, (int)config->player.pos.x, 
+        (int)config->player.pos.y) || detect_map_leaks(config, tmp))
         return (print_err("Map error: leak detected on the map!\n"));
     return (0);
 }
