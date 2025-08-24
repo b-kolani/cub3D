@@ -12,7 +12,7 @@ void    fetch_map_desc_lines(char **grid, char **lines, t_gc *gc)
     while (lines[++i])
     {
         if (is_map_desc_line(lines[i]))
-            grid[++j] = ft_substr(lines[i], 0, ft_strlen(lines[i]) - 1, gc);
+            grid[++j] = ft_substr(lines[i], 0, ft_strlen(lines[i]), gc);
     }
     grid[++j] = NULL;
 

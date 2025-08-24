@@ -35,13 +35,13 @@ static int check_walls(t_map map)
             j = -1;
             while (map.grid[i][++j])
             {  
-                if (map.grid[i][j] != '1' && map.grid[i][j] != ' ')
+                if (map.grid[i][j] != '1' && !ft_isspace(map.grid[i][j]))
                     return (print_err("Map error: The map must be surrounded by walls!\n"));
             }
         }
-        else if ((map.grid[i][0] != '1' && map.grid[i][0] != ' ') 
+        else if ((map.grid[i][0] != '1' && !ft_isspace(map.grid[i][0])) 
             || (map.grid[i][ft_strlen(map.grid[i]) - 1] != '1' 
-            && map.grid[i][ft_strlen(map.grid[i]) - 1] != ' '))
+            && !ft_isspace(map.grid[i][ft_strlen(map.grid[i]) - 1])))
             return (print_err("Map error: Invalid line between first and last lines!\n"));
     }
     return (0);
