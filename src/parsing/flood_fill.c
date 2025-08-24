@@ -30,8 +30,7 @@ int flood_fill_space(t_config *config, char **tmp_map, int x, int y)
     height = config->map.height;
     if (x < 0 || y < 0 || x >= width || y >= height)
         return (1); // On sort de la map pas une fuite
-    if (tmp_map[y][x] == '1' || tmp_map[y][x] == 'F' 
-        || tmp_map[y][x] == 'F')
+    if (tmp_map[y][x] == '1' || tmp_map[y][x] == 'F')
         return (1);
     if (tmp_map[y][x] == '0' || tmp_map[y][x] == 'N'
         || tmp_map[y][x] == 'S' || tmp_map[y][x] == 'E'
