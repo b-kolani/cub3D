@@ -9,7 +9,7 @@ int	main(int ac, const char **av)
 {
 	t_game	*game;
 
-	atexit(detect_leaks);
+	//atexit(detect_leaks);
 
 	if (ac != 2)
 		return (print_err("Usage: ./cub3D <map>.cub\n"));

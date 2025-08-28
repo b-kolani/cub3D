@@ -32,20 +32,18 @@ int close_window(t_game *game)
 
 int rendering(t_game *game)
 {
-    if (init_mlx(&game->mlx))
+    if (ft_init_mlx(&game->mlx))
         return (-1);
     // Creer une nouvelle image en memoire et dessiner ou ecrire pixel par pixel
     game->mlx.screen.img_ptr = mlx_new_image(game->mlx.mlx_ptr, WIDTH, HEIGHT);
     if (!game->mlx.screen.img_ptr)
         return (print_err("mlx error: Failed to create mlx image\n"));
-    // Recuperer l'adresse de notre image en memoire qui pointe vers le premier pixel 
+    // Recuperer l'adresse de no tre image en memoire qui pointe vers le premier pixel 
     // dans le tableau des donnees brutes de notre image en memoire et d'autres
     // donnees comme la longueur de chaque ligne du tableau en memoire
     // le nombre de bits pour chaque pixel, comme chaque octets est stocke (endianness:
     // est ce du plus significatif au moins significatif ou le contraire)
-    game->mlx.screen.img_data_addr = mlx_get_data_addr(game->mlx.screen.img_ptr, 
-        &game->mlx.screen.bits_per_pixel, &game->mlx.screen.line_length, 
-        &game->mlx.screen.endian);
+    game->mlx.screen.img_data_addr = mlx_get_data_addr(game->mlx.screen.img_ptr, &game->mlx.screen.bits_per_pixel, &game->mlx.screen.line_length, &game->mlx.screen.endian);
     if (!game->mlx.screen.img_data_addr)
         return (print_err("mlx error: Failed to get image address\n"));
     // if (access(game->config.no, F_OK) == 0)

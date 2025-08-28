@@ -175,7 +175,7 @@ int 	parse_elements(t_config *config, t_gc *gc, char **lines, size_t *map_len);
 
 // RENDER FUNCTIONS
 int 	rendering(t_game *game);
-int		init_mlx(t_mlx *mlx_);
+int		ft_init_mlx(t_mlx *mlx);
 // int		render_frame(t_game *game);
 
 // RENDER UTILS FUNCTIONS 

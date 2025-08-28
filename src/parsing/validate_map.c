@@ -54,7 +54,7 @@ int find_player_position(t_config *config, char **tmp_map)
     char    *player_pos_line;
 
     i = -1;
-    int j = -1;
+    //int j = -1;
     player = 0;
     player_pos_line = NULL;
     while (tmp_map[++i])
