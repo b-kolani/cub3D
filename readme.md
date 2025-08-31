@@ -1,3 +1,5 @@
 - check the xpm extension before validate the file
 - Find a dynamic way for allocation of the map in the parsing
 - si le map est superieure à 2048 line il affiche cette Map error: need only one player on the map! même s'il y a un seul joueur
+- case of an empty map it seg
+- case of the file has no permission

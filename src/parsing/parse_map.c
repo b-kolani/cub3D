@@ -1,25 +1,54 @@
 #include "../../includes/cub3d.h"
 
 // Lecture du fichier .cub
-static char **read_map_file_lines(const char *filename, t_gc *gc)
+static int	count_map_lines(const char *filename, t_gc *gc)
 {
-    int fd;
-    char    **lines;
-    char    *line;
-    int     i;
+	int		fd;
+	char	*line;
+	int		count;
 
-    fd = open(filename, O_RDONLY, 0644);
-    if (fd == -1)
-        return (NULL);
-    lines = gc_malloc(gc, sizeof(char *) * 2048);
-    line = NULL;
-    i = -1;
-    while ((line = get_next_line(fd, gc)) && i < 2047)
-        lines[++i] = ft_strdup(line, gc);
-    lines[++i] = NULL;
-    close(fd);
-    return (lines);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (-1);
+	count = 0;
+	line = get_next_line(fd, gc);
+	while (line)
+	{
+		count++;
+		line = get_next_line(fd, gc);
+	}
+	close(fd);
+	return (count);
 }
+
+static  char	**read_map_file_lines(const char *filename, t_gc *gc)
+{
+	int		fd;
+	char	**lines;
+	char	*line;
+	int		count;
+	int		i;
+
+	count = count_map_lines(filename, gc);
+	if (count <= 0)
+		return (NULL);
+	lines = gc_malloc(gc, sizeof(char *) * (count + 1));
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (NULL);
+	i = 0;
+	line = get_next_line(fd, gc);
+	while (line)
+	{
+		lines[i] = ft_strdup(line, gc);
+		i++;
+		line = get_next_line(fd, gc);
+	}
+	lines[i] = NULL;
+	close(fd);
+	return (lines);
+}
+
 
 // Fonction principale du parsing
 int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
