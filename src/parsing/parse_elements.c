@@ -4,6 +4,8 @@
 static int set_config(t_config *config, t_gc *gc, size_t map_len)
 {
     config->map.grid = gc_malloc(gc, sizeof(char *) * (map_len + 1));
+    if (!config->map.grid)
+        return (print_err("Error: allocation failed\n"));
     config->map.height = map_len;
     return (0);
 }
@@ -126,8 +128,14 @@ int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 		else if (!is_empty_line(lines[i]))
 			return (print_err("Map error: Invalid configuration line!\n"));
 	}
-	if (*map_len > 0 && *map_len != (size_t)(last_map_line - first_map_line + 1))
+	if (*map_len > 0 && *map_len != (size_t)(last_map_line - first_map_line))
+    {
+
+        printf("map len: %zu\n", *map_len);
+        printf("first line: %d\n", first_map_line);
+        printf("last line: %d\n", last_map_line);
 		return (print_err("Map error: Empty lines inside map description!\n"));
+    }
 	return (0);
 }
 
@@ -140,8 +148,10 @@ int parse_elements(t_config *config, t_gc *gc, char **lines, size_t *map_len)
     map_started = 0;
     if (iterate_on_lines(config, gc, lines, map_len))
         return (-1);
-    if (!config->floor_found || !config->ceil_found)
+    if (!config->floor_found || !config->ceil_found) {
+        // printf("Colors: %d %d\n", config->floor_found, config->ceil_color);
         return (print_err("Map error: Color configuration line missing\n"));
+    }
     set_config(config, gc, *map_len);
     fetch_map_desc_lines(config->map.grid, lines, gc);
     return (0);

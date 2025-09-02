@@ -285,7 +285,7 @@ int 	is_path_line(const char *line);
 int		is_map_config_line(const char *line);
 int		is_map_desc_line(const char *line);
 int		is_empty_line(const char *line);
-int 	flood_fill(t_config *config, char **tmp_map, int x, int y);
+int 	d_fill(t_config *config, char **tmp_map, int x, int y);
 int 	flood_fill_space(t_config *config, char **tmp_map, int x, int y);
 void    set_player_x_pos(t_config *config, char *pos_line);
 void	set_player_orientation(t_player *player, char *pos_line);

@@ -1,9 +1,9 @@
 #include "../../includes/cub3d.h"
 
-static int detect_map_leaks(t_config *config, char **tmp)
+static int detect_map_leaks(t_gc *gc ,t_config *config, char **tmp)
 {
-    int x;
-    int y;
+    int x ;
+    int y ;
 
     y = -1;
     while (++y < config->map.height)
@@ -13,7 +13,8 @@ static int detect_map_leaks(t_config *config, char **tmp)
         {
             if (tmp[y][x] == ' ')
             {
-                if (!flood_fill_space(config, tmp, x, y))
+                // if (!flood_fill_space(config, tmp, x, y))
+                    if(!flood_fill_space_bfs(gc ,config, tmp,  x,  y))
                     return (-1);
             }
         }
@@ -124,8 +125,8 @@ int validate_map(t_config *config, t_gc *gc, size_t map_len)
         return (-1);
     if (find_player_position(config, tmp))
         return (-1);
-    if (!flood_fill(config, tmp, (int)config->player.pos.x, 
-        (int)config->player.pos.y) || detect_map_leaks(config, tmp))
+        
+    if (detect_map_leaks(gc ,config, tmp))
         return (print_err("Map error: leak detected on the map!\n"));
     return (0);
 }
