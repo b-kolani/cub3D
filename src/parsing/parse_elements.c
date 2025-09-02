@@ -108,7 +108,7 @@ int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 	map_started = 0;
 	first_map_line = -1;
 	last_map_line = -1;
-	
+    
 	while (lines[++i])
 	{
 		if (is_map_config_line(lines[i]))
@@ -153,6 +153,7 @@ int parse_elements(t_config *config, t_gc *gc, char **lines, size_t *map_len)
             print_err("config->floor_found is NULL\n");
         print_err("config->ceil_found is NULL\n");
         return (print_err("Map error: Color configuration line missing\n"));
+    }
     set_config(config, gc, *map_len);
     fetch_map_desc_lines(config->map.grid, lines, gc);
     return (0);

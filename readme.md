@@ -1,3 +1,2 @@
 - check the xpm extension before validate the file
-- case of an empty map it seg
 - case of the file has no permission
