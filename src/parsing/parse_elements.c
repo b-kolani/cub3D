@@ -127,11 +127,11 @@ int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 		}
 		else if (!is_empty_line(lines[i]))
 			return (print_err("Map error: Invalid configuration line!\n"));
+        else if (is_empty_line(lines[i]))
+            printf("Empty line dfound at line: %d\n", i);
 	}
-	if (*map_len > 0 && *map_len != (size_t)(last_map_line - first_map_line))
-    {
-
-        printf("map len: %zu\n", *map_len);
+	if (*map_len > 0 && *map_len != (size_t)(last_map_line - first_map_line + 1)) {
+        printf("map_len: %zd\n", *map_len);
         printf("first line: %d\n", first_map_line);
         printf("last line: %d\n", last_map_line);
 		return (print_err("Map error: Empty lines inside map description!\n"));
@@ -142,16 +142,14 @@ int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 int parse_elements(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 {
     int     i;
-    int     map_started;
+    // int     map_started;
 
     i = -1;
-    map_started = 0;
+    // map_started = 0;
     if (iterate_on_lines(config, gc, lines, map_len))
         return (-1);
-    if (!config->floor_found || !config->ceil_found) {
-        // printf("Colors: %d %d\n", config->floor_found, config->ceil_color);
+    if (!config->floor_found || !config->ceil_found)
         return (print_err("Map error: Color configuration line missing\n"));
-    }
     set_config(config, gc, *map_len);
     fetch_map_desc_lines(config->map.grid, lines, gc);
     return (0);
