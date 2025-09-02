@@ -149,7 +149,9 @@ int parse_elements(t_config *config, t_gc *gc, char **lines, size_t *map_len)
     if (iterate_on_lines(config, gc, lines, map_len))
         return (-1);
     if (!config->floor_found || !config->ceil_found) {
-        // printf("Colors: %d %d\n", config->floor_found, config->ceil_color);
+        if(!config->floor_found)
+            print_err("config->floor_found is NULL\n");
+        print_err("config->ceil_found is NULL\n");
         return (print_err("Map error: Color configuration line missing\n"));
     }
     set_config(config, gc, *map_len);

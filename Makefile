@@ -2,7 +2,7 @@ NAME = cub3D
 NAME_BONUS = cub3D_bonus
 
 CC = cc 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
 
 LIBMLX = -L../minilibx_opengl_20191021 -I../minilibx_opengl_20191021 -lmlx -framework OpenGL -framework AppKit
 
