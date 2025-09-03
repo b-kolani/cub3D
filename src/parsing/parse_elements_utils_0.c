@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 18:09:00 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/02 21:53:25 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/03 13:15:53 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	parse_color(const char *line, t_config *config,char conf_type, t_gc *gc)
 	int		rgb_int[3];
 	size_t	len;
 
-	rgb = ft_split(line, ',');
+	rgb = ft_split(gc ,line, ',');
 	len = 0;
 	while (rgb[len])
 		len++;
@@ -58,7 +58,6 @@ int	parse_color(const char *line, t_config *config,char conf_type, t_gc *gc)
 	else
 		config->ceil_color = (rgb_int[0] << 16)
 			| (rgb_int[1] << 8) | rgb_int[2];
-	free_split_alloc(rgb);
 	return (0);
 }
 

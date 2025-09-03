@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 18:19:40 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/02 21:25:16 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:41:26 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,11 @@
 int	parse_color_helper(char **rgb, int *rgb_int, t_gc *gc, size_t len)
 {
 	if (len < 3 || len > 3)
-	{
-		free_split_alloc(rgb);
 		return (print_err("Map error: Only 3 integers needed for a color!\n"));
-	}
 	if (!is_color_integer(rgb[0], &rgb_int[0], gc)
 		|| !is_color_integer(rgb[1], &rgb_int[1], gc)
 		|| !is_color_integer(rgb[2], &rgb_int[2], gc))
 	{
-		free_split_alloc(rgb);
 		return (print_err("Map error: Only digits are needed for each color!\n"));
 	}
 	return (0);
@@ -35,7 +31,10 @@ int	is_color_line(const char *line)
 		return (0);
 	return (1);
 }
-
+int 	is_space(int c)
+{
+	return(c == ' ' || c == '\n' || c == '\t');
+}
 int	is_color_integer(char *color, int *rgb_int, t_gc *gc)
 {
 	size_t	i;
@@ -46,10 +45,10 @@ int	is_color_integer(char *color, int *rgb_int, t_gc *gc)
 	while (i < ft_strlen(color))
 	{
 		if (!(color[i] >= '0' && color[i] <= '9')
-			&& color[i] != '\n' && color[i] != '-'
+			&& !is_space(color[i]) && color[i] != '-'
 			&& color[i] != '+')
 			return (0);
-		if (color[i] == '\n')
+		if (is_space(color[i]))
 		{
 			str_without_new_line = ft_substr(color, 0, i, gc);
 			break ;
@@ -71,12 +70,4 @@ int	is_path_line(const char *line)
 	return (0);
 }
 
-void	free_split_alloc(char **arr)
-{
-	int	i;
 
-	i = -1;
-	while (arr[++i])
-		free(arr[i]);
-	free(arr);
-}

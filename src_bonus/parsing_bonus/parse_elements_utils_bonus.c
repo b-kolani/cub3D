@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_elements_utils_bonus.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/03 15:15:30 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/09/03 16:39:42 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_bonus.h"
 
 int parse_color_helper(char **rgb, int *rgb_int, t_gc *gc, size_t len)
@@ -22,11 +34,11 @@ int is_color_line(const char *line)
 {
     if (ft_strncmp(line, "F ", 2) && ft_strncmp(line, "C ", 2))
         return (0);
-    // else if (!ft_strncmp(line, "F ", 2))
-    //     *floor_found = 1;
-    // else if (!ft_strncmp(line, "C ", 2))
-    //     *ceil_found = 1;
     return (1);
+}
+int     is_space(int  c)
+{
+    return(c == ' ' || c == '\n' || c == '\t');
 }
 
 // Check if each color(r, g, b) is integer
@@ -40,10 +52,10 @@ int is_color_integer(char *color, int *rgb_int, t_gc *gc)
     while(i < ft_strlen(color))
     {
         if (!(color[i] >= '0' && color[i] <= '9') 
-            && color[i] != '\n' && color[i] != '-'
-            && color[i] != '+')
+            && !is_space(color[i] && color[i] != '-'
+            && color[i] != '+'))
             return (0);
-        if (color[i] == '\n') {
+        if (is_space(color[i])) {
             str_without_new_line = ft_substr(color, 0, i, gc);
             break ;
         }
@@ -66,12 +78,4 @@ int is_path_line(const char *line)
 }
 
 // Free split() resrcs
-void    free_split_alloc(char **arr)
-{
-    int i;
 
-    i = -1;
-    while (arr[++i])
-        free(arr[i]);
-    free(arr);
-}

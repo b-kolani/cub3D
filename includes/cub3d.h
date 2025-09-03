@@ -150,7 +150,7 @@ char	*get_next_line(int fd, t_gc *gc);
 char	*ft_strjoin(char *s1, char *s2, t_gc *gc);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strdup(const char *s, t_gc *gc);
-char	**ft_split(char const *s, char c);
+char	**ft_split(t_gc *gc, char const *s, char c);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int		ft_atoi(const char *str);
 int 	ft_isspace(const char c);
@@ -161,7 +161,6 @@ void	*ft_memset(void *b, int c, size_t len);
 
 // PARSING UTILS FUNCTIONS
 int		parse_color_helper(char **rgb, int *rgb_int, t_gc *gc, size_t len);
-void    free_split_alloc(char **arr);
 int 	is_color_line(const char *line);
 int 	is_color_integer(char *color, int *rgb_int, t_gc *gc);
 int 	is_path_line(const char *line);
