@@ -493,7 +493,7 @@ int draw_mini_map(t_game *game)
     // while (++i < game->config.map.height)
     //     printf("%s%%\n", game->config.map.grid[i]);
     // printf("\n");
-    if (game->config.map.height > 72 || game->config.map.width > 128)
+    if (game->config.map.height > HEIGHT/10 || game->config.map.width > WIDTH/10)
         return (print_err("Failed to draw mini map; out of window sizes bounds\n"));
     while (++map_y < game->config.map.height)
     {
