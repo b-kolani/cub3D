@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/02 21:44:50 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/09/02 21:46:18 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
-// Lecture du fichier .cub
 static int	count_map_lines(const char *filename, t_gc *gc)
 {
 	int		fd;
@@ -9,7 +20,7 @@ static int	count_map_lines(const char *filename, t_gc *gc)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		return (-1);
+		return (print_err("Error opening file\n"), -1);
 	count = 0;
 	line = get_next_line(fd, gc);
 	while (line)
@@ -21,7 +32,7 @@ static int	count_map_lines(const char *filename, t_gc *gc)
 	return (count);
 }
 
-static  char	**read_map_file_lines(const char *filename, t_gc *gc)
+static char	**read_map_file_lines(const char *filename, t_gc *gc)
 {
 	int		fd;
 	char	**lines;
@@ -30,11 +41,8 @@ static  char	**read_map_file_lines(const char *filename, t_gc *gc)
 	int		i;
 
 	count = count_map_lines(filename, gc);
-	if (count <= 0)
-	{
-		printf("Error: Nothing to parse\n");
-		return (NULL);
-	}
+	if (count == 0)
+		return (print_err("Error: the map is empty\n"), NULL);
 	lines = gc_malloc(gc, sizeof(char *) * (count + 1));
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -52,20 +60,20 @@ static  char	**read_map_file_lines(const char *filename, t_gc *gc)
 	return (lines);
 }
 
-
-// Fonction principale du parsing
 int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
 {
-    char    **lines;
-    size_t  map_desc_len;
+	char	**lines;
+	size_t	map_desc_len;
 
-    map_desc_len = 0;
-    if (ft_strncmp(filename + (ft_strlen(filename) - 4), ".cub", 4))
-        return (print_err("File error: invalid file; need .cub extension file\n"));
-    lines = read_map_file_lines(filename, gc);
-    if (parse_elements(config, gc, lines, &map_desc_len) || validate_config(config, gc)
-        || validate_map(config, gc, map_desc_len))
-        return (-1);
-    config->map.grid[(int)config->player.pos.y][(int)config->player.pos.x] = '0';
-    return (0);
+	map_desc_len = 0;
+	if (ft_strncmp(filename + (ft_strlen(filename) - 4), ".cub", 4))
+		return (print_err("File error: invalid file; need .cub extension file\n"));
+	lines = read_map_file_lines(filename, gc);
+	if (!lines)
+		return (1);
+	if (parse_elements(config, gc, lines, &map_desc_len) || validate_config(config, gc)
+		|| validate_map(config, gc, map_desc_len))
+		return (-1);
+	config->map.grid[(int)config->player.pos.y][(int)config->player.pos.x] = '0';
+	return (0);
 }

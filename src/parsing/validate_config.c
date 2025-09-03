@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_config.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/02 21:48:40 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/09/02 21:48:56 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
 // Ajouter 0.5 a x pour placer le joueur au milieu de la colonne
@@ -92,8 +104,6 @@ static void set_direction(t_player *player, char dir)
         player->dir.y = 0;
         set_plane(player, 0, -0.66);
     }
-    // printf("Player dir: %f %f\n", player->dir.x, player->dir.y);
-    // printf("Player plane: %f %f\n", player->plane.x, player->plane.y);
 }
 
 void    set_player_orientation(t_player *player, char *pos_line)

@@ -58,6 +58,13 @@ typedef	struct s_config {
 	int			ceil_found;
 }	t_config;
 
+typedef struct s_point
+{
+	int	x;
+	int	y;
+	int max_size;
+}	t_point;
+
 typedef struct s_img {
 	void	*img_ptr; // Image créee en mémoire avec mlx_new_image
 	char	*img_data_addr; // Pointeur vers les donnees de l'img en memoire img_data_addr
