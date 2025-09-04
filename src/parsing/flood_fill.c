@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 17:42:06 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/02 21:28:46 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/04 17:18:57 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ int	check_for_invalide_char(char **tmp_map, t_point p)
 		|| tmp_map[p.y][p.x] == 'S' || tmp_map[p.y][p.x] == 'E'
 		|| tmp_map[p.y][p.x] == 'W');
 }
+
 void 	init_vars(int *front, int *back)
 {
 	*front = 0;
 	*back = 0;
 }
+
 int	flood_fill_space_bfs(t_gc *gc, t_config *config, char **tmp_map, int x, int y)
 {
 	t_point	*q;
