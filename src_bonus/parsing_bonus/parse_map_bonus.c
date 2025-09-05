@@ -28,30 +28,19 @@ int    add_sprite(t_config *config, double x, double y, int type)
     t_sprite    *new_arr;
     int         i;
 
-    // Créer un nouveau tableau et faire l'allocation
     new_arr = malloc(sizeof(t_sprite) * (config->sprites_count + 1));
     if (!new_arr)
         return (print_err("new_arr allocation failed\n"));
-    // Si l'ancien tableau avait un contenu
-    // le copier dans le nouveau
     i = -1;
     while (++i < config->sprites_count)
         new_arr[i] = config->sprites[i];
-    // Ajouter le nouveau sprite
-    // new_arr[config->sprites_count].item = '3';
     new_arr[config->sprites_count].x = x + 0.5;
     new_arr[config->sprites_count].y = y + 0.5;
     new_arr[config->sprites_count].type = type;
-    // if (type == ITEM_TYPE)
     new_arr[config->sprites_count].active = true;
-    // else if (type == DOOR_TYPE)
-    //     new_arr[config->sprites_count].is_open = false;
-    new_arr[config->sprites_count].anim_index = 0; // Frame courant du sprite
-    // Libérer l'ancien tableau avant de
-    // lui assigner le nouveau;
+    new_arr[config->sprites_count].anim_index = 0;
     if (config->sprites)
         free(config->sprites);
-    // Affecter le nouveau tableau à l'ancien
     config->sprites = new_arr;
     config->sprites_count++;
     return (0);
@@ -68,7 +57,6 @@ int    add_door(t_config *config, int x, int y)
     i = -1;
     while (++i < config->doors_count)
         new_arr[i] = config->doors[i];
-    // new_arr[config->doors_count].door = '4';
     new_arr[config->doors_count].x = x + 0.5;
     new_arr[config->doors_count].y = y + 0.5;
     new_arr[config->doors_count].anim_timer = 0;
@@ -77,16 +65,6 @@ int    add_door(t_config *config, int x, int y)
     new_arr[config->doors_count].door_offset = 0.0;
     new_arr[config->doors_count].state = 0;
     new_arr[config->doors_count].side_hit = 0;
-    // new_arr[config->doors_count].dir.x = 0;
-    // new_arr[config->doors_count].dir.y = 0;
-    // if (new_arr[config->doors_count].x - config->player.pos.x > 0)
-    //     new_arr[config->doors_count].dir.x = 1;
-    // else if (new_arr[config->doors_count].x - config->player.pos.x < 0)
-    //     new_arr[config->doors_count].dir.x = -1;
-    // if (new_arr[config->doors_count].y - config->player.pos.y > 0)
-    //     new_arr[config->doors_count].dir.y = 1;
-    // else if (new_arr[config->doors_count].y - config->player.pos.y < 0)
-    //     new_arr[config->doors_count].dir.y = -1;
     if (config->doors)
         free(config->doors);
     config->doors = new_arr;
@@ -105,11 +83,6 @@ int    fill_sprites_and_doors_arrays(t_config *config)
         j = -1;
         while (config->map.grid[i][++j])
         {
-            // if (config->map.grid[i][j] == '2')
-            // {
-            //     if (add_sprite(config, j, i, ENEMY_TYPE))
-            //         return (-1);
-            // }
             if (config->map.grid[i][j] == '3')
             {
                 if (add_sprite(config, j, i, ITEM_TYPE))
@@ -117,8 +90,6 @@ int    fill_sprites_and_doors_arrays(t_config *config)
             }
             else if (config->map.grid[i][j] == '4')
             {
-                // if (add_sprite(config, j, i, DOOR_TYPE))
-                //     return (-1);
                 if (add_door(config, j, i))
                     return (-1);
             }
@@ -127,7 +98,6 @@ int    fill_sprites_and_doors_arrays(t_config *config)
     return (0);
 }
 
-// Fonction principale du parsing
 int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
 {
     char    **lines;
@@ -148,25 +118,7 @@ int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
         || validate_map(config, gc, map_desc_len))
         return (-1);
     config->map.grid[(int)config->player.pos.y][(int)config->player.pos.x] = '0';
-    // config->sprites = gc_malloc(gc, config->sprites_count * sizeof(t_sprite) + 1);
-    // if (!config->sprites)
-    //     return (print_err("Sprites array allocation failed\n"));
-    // config->doors = gc_malloc(gc, config->doors_count * sizeof(t_door) + 1);
-    // if (!config->doors)
-    //     return (print_err("Doors array allocation failed\n"));
     if (fill_sprites_and_doors_arrays(config))
         return (-1);
-    // int i = -1;
-    // while (++i < config->sprites_count)
-    //     printf("Sprite: %d\n", config->sprites[i].type);
-    // i = -1;
-    // while (++i < config->doors_count)
-    //     printf("Door: x: %d, y: %d\n", config->doors[i].x, config->doors[i].y);
-    // int i = -1;
-    // while (++i < config->doors_count)
-    //     printf("Player dir: x:%f, y:%f - Door dir: x:%f, y:%f\n", 
-    //     config->player.dir.x, config->player.dir.y, 
-    //     config->doors[i].dir.x, config->doors[i].dir.y);
-    
     return (0);
 }

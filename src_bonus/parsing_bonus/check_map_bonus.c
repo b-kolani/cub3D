@@ -15,9 +15,6 @@ void    fetch_map_desc_lines(t_config *config, char **lines, t_gc *gc)
             config->map.grid[++j] = ft_substr(lines[i], 0, ft_strlen(lines[i]), gc);
     }
     config->map.grid[++j] = NULL;
-    // i = -1;
-    // while (config->map[++i])
-    //     printf("%s#", config->map[i]);
 }
 
 // Verifier si une ligne de la carte est vide ou pas

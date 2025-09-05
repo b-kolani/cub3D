@@ -4,7 +4,6 @@
 # include "unistd.h"
 # include "stdio.h"
 # include "../../minilibx_opengl_20191021/mlx.h"
-// # include "X11/X.h"
 # include "fcntl.h"
 # include "stdlib.h"
 # include "string.h"
@@ -15,10 +14,6 @@
 
 # define BUFFER_SIZE 42
 
-// Pour les portes et sprites
-// # define MAX_SPRITES 64
-// # define MAX_DOORS 32
-// # define ENEMY_TYPE 0
 # define WALL_TYPE 0
 # define DOOR_TYPE 1
 # define ITEM_TYPE 2
@@ -28,30 +23,28 @@
 # define DOOR_FRAMES 2
 # define MAX_FRAMES_PER_SPRITE 30
 
-# define CELL_SIZE 10// Taille d'une case sur le mini-map
+# define CELL_SIZE 10
 # define ITEM_CELL_SIZE 5
 # define PLAYER_CELL_SIZE 5
 # define DOOR_CELL_SIZE 5
 # define START_PIXEL_X 1
 # define START_PIXEL_Y 1
-// # define TILE_SIZE 10
 
-// POur le fov sur la mini map
-# define FOV (M_PI / 3) // Calcul l'angle du cône qui représente le FOV
-// sur la mini map ici 60 dégré en radian
+# define FOV (M_PI / 3)
 
-// Pour le rendu
 # define HEIGHT 720
 # define WIDTH 1280
 
-typedef enum e_texture { NORTH, SOUTH, WEST, EAST }	t_texture;
+typedef enum e_texture
+{
+	NORTH,
+	SOUTH,
+	WEST,
+	EAST
+}	t_texture;
 
-// # define VERTICAL 0
-// # define HORIZONTAL 1
-
-// STRUCT POUR LES SPRITES
-
-typedef struct s_fov {
+typedef struct s_fov
+{
 	int     x;
 	int		y;
 	double	dx;
@@ -285,7 +278,8 @@ int 	is_path_line(const char *line);
 int		is_map_config_line(const char *line);
 int		is_map_desc_line(const char *line);
 int		is_empty_line(const char *line);
-int 	d_fill(t_config *config, char **tmp_map, int x, int y);
+// int 	d_fill(t_config *config, char **tmp_map, int x, int y);
+int		flood_fill(t_config *config, char **tmp_map, int x, int y);
 int 	flood_fill_space(t_config *config, char **tmp_map, int x, int y);
 void    set_player_x_pos(t_config *config, char *pos_line);
 void	set_player_orientation(t_player *player, char *pos_line);
@@ -307,6 +301,21 @@ int		draw_background(t_game *game);
 int		put_pixel(t_img *img, int x, int y, int color);
 int		get_texture_pixels(t_img* tex, int x, int y);
 int		draw_mini_map(t_game *game);
+int		draw_opened_door_side_x(t_game *game, int color, int pixel_x, int pixel_y);
+int		draw_opened_door_side_y(t_game *game, int color, int pixel_x, int pixel_y);
+int		draw_closed_door_side_x(t_game *game, int color, int pixel_x,int pixel_y);
+int		draw_closed_door_side_y(t_game *game, int color, int pixel_x,int pixel_y);
+void	calculate_dist_camera_to_sprite(t_config *config);
+void	sort_sprites_by_distance(t_sprite *sprites, int count);
+void	update_sprites_animation(t_game *game);
+void	update_all_doors(t_config *config);
+void	render_all_sprites(t_game *game);
+int		draw_map_wall_cell(t_img *screen, int map_x, int map_y, int color);
+int		is_item_active(t_config *config, int x, int y);
+int		draw_map_item_cell(t_game *game, int map_x, int map_y, int color);
+int		draw_map_door_cell(t_game *game, int map_x, int map_y, int color);
+int		draw_player_on_the_map(t_game *game, int color);
+int		project_and_render_sprite(t_game *game, t_sprite *sprite);
 
 // RAYCASTING FUNCTIONS
 int		raycasting(t_game *game);
@@ -315,7 +324,16 @@ void	perform_dda(t_ray *ray, t_config *config);
 void	init_dda(t_ray *ray, t_config *config);
 void	compute_projection(t_ray *ray);
 int		draw_column(t_ray *ray, t_game *game, int x);
-// void    cast_single_ray(t_game *game, int x);
+int		dda_hit_door(t_config *config, t_ray *ray);
+void	get_x_side_door_dir_text(t_ray *ray, t_door *door, int *dir_tex);
+void	get_y_side_door_dir_text(t_ray *ray, t_door *door, int *dir_tex);
+void    init_text_helper(t_config *config, t_ray *ray, double *wall_x);
+int		draw_col_helper(t_game *game, t_ray *ray, t_img *texture, int x);
+t_img	*get_dir_texture(t_ray *ray, t_img *textures);
+t_img	*get_door_dir_text(t_ray *ray, t_door *door, t_img *textures);
+int		initialize_texture(t_ray *ray, t_img *texture, t_config *config);
+int		apply_shadow(int color, double distance, int side);
+void	init_fov(t_game *game, t_fov **fov);
 
 // PLAYER AND ENEMYS MOVEMENTS AND EVENTS
 int		update_player(t_game *game);
@@ -327,7 +345,10 @@ void	strafe_left(t_game *game);
 void	strafe_right(t_game *game);
 int 	mouse_move_handler(int x, int y, t_game *game);
 int 	mouse_click_handler(int button, int x, int y, t_game *game);
-void	move_enemies(t_game *game);
+// void	move_enemies(t_game *game);
+void	handle_x_movement(t_game *game, double next_x);
+void	handle_y_movement(t_game *game, double next_y);
+void	detect_item(t_config *config, int x, int y);
 // void	update_enemy_position(t_game *game, t_sprite *enemy);
 
 // ROTATE CAMERA
@@ -347,5 +368,7 @@ void    load_door_all_text(t_game *game);
 // DOORS UTILS
 t_door *find_door(t_config *config, int map_x, int map_y);
 t_door  *get_door_in_front_of_player(t_config *config);
+t_door	*get_door_in_front_helper(t_config *config, int idx);
+void	open_door(t_game *game);
 
 #endif

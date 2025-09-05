@@ -17,19 +17,13 @@ int parse_color_helper(char **rgb, int *rgb_int, t_gc *gc, size_t len)
     return (0);
 }
 
-// Check if it is color config line
 int is_color_line(const char *line)
 {
     if (ft_strncmp(line, "F ", 2) && ft_strncmp(line, "C ", 2))
         return (0);
-    // else if (!ft_strncmp(line, "F ", 2))
-    //     *floor_found = 1;
-    // else if (!ft_strncmp(line, "C ", 2))
-    //     *ceil_found = 1;
     return (1);
 }
 
-// Check if each color(r, g, b) is integer
 int is_color_integer(char *color, int *rgb_int, t_gc *gc)
 {
     size_t i;
@@ -56,7 +50,6 @@ int is_color_integer(char *color, int *rgb_int, t_gc *gc)
     return (1);
 }
 
-// Check if it is texture path config line
 int is_path_line(const char *line)
 {
     if (!ft_strncmp(line, "NO ", 3) || !ft_strncmp(line, "SO ", 3)
@@ -65,7 +58,6 @@ int is_path_line(const char *line)
     return (0);
 }
 
-// Free split() resrcs
 void    free_split_alloc(char **arr)
 {
     int i;

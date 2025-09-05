@@ -1,15 +1,8 @@
 #include "../includes/cub3d.h"
 
-void	detect_leaks()
-{
-	system("leaks cub3D");
-}
-
 int	main(int ac, const char **av)
 {
 	t_game	*game;
-
-	// atexit(detect_leaks);
 
 	if (ac != 2)
 		return (print_err("Usage: ./cub3D <map>.cub\n"));

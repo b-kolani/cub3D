@@ -21,7 +21,6 @@ static int detect_map_leaks(t_config *config, char **tmp)
     return (0);
 }
 
-// Verifier si la carte est entouree de murs
 static int check_walls(t_map map)
 {
     int i;
@@ -73,11 +72,6 @@ int find_player_position(t_config *config, char **tmp_map)
     return (0);
 }
 
-// Normailser les lignes c-a-d ajouter des espaces pour 
-// qu etoutes les lignes aient la meme taille
-// Cela evite des erreurs de raycasting; des segfaults
-// les bugs de rendu
-// les comportements imprévus du joueur (traversé des murs)
 static int  normalized(char **config_map, char **tmp, t_gc *gc, size_t max_len)
 {
     int i;
@@ -100,8 +94,6 @@ static int  normalized(char **config_map, char **tmp, t_gc *gc, size_t max_len)
    return (0);
 }
 
-
-// Valider la carte
 int validate_map(t_config *config, t_gc *gc, size_t map_len)
 {
     int i;
@@ -128,8 +120,5 @@ int validate_map(t_config *config, t_gc *gc, size_t map_len)
     if (!flood_fill(config, tmp, config->player.pos.x, 
         config->player.pos.y) || detect_map_leaks(config, tmp))
         return (print_err("Map error: leak detected on the map!\n"));
-    // i = -1;
-    // while (tmp[++i])
-    //     printf("%s\n", tmp[i]);
     return (0);
 }

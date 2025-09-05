@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bkolani <bkolani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 18:19:40 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/02 21:25:16 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/04 11:47:00 by bkolani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	is_color_integer(char *color, int *rgb_int, t_gc *gc)
 	{
 		if (!(color[i] >= '0' && color[i] <= '9')
 			&& color[i] != '\n' && color[i] != '-'
-			&& color[i] != '+')
+			&& color[i] != '+' && color[i] == ' ')
 			return (0);
 		if (color[i] == '\n')
 		{

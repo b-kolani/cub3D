@@ -4,7 +4,6 @@
 # include "unistd.h"
 # include "stdio.h"
 # include "../../minilibx_opengl_20191021/mlx.h"
-// # include "X11/X.h"
 # include "fcntl.h"
 # include "stdlib.h"
 # include "string.h"
@@ -14,7 +13,6 @@
 
 # define BUFFER_SIZE 42
 
-// Pour le rendu
 # define HEIGHT 720
 # define WIDTH 1280
 

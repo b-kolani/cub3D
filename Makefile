@@ -52,7 +52,15 @@ SRCS_BONUS = src_bonus/cub3d_bonus.c utils/error.c utils/ft_strlen.c \
 		src_bonus/player_bonus/movement_bonus.c \
 		src_bonus/player_bonus/movement_utils_bonus.c \
 		src_bonus/player_bonus/rotate_camera_bonus.c \
-		src_bonus/render_bonus/load_textures_bonus.c
+		src_bonus/render_bonus/load_textures_bonus.c \
+		src_bonus/events_bonus/events_bonus_utils.c \
+		src_bonus/render_bonus/raycasting_utils_0_bonus.c \
+		src_bonus/render_bonus/render_utils_bonus_0.c \
+		src_bonus/render_bonus/raycasting_utils_bonus_0.c \
+		src_bonus/render_bonus/rendering_utils_bonus_.c \
+		src_bonus/render_bonus/rendering_utils_bonus__.c \
+		src_bonus/render_bonus/rendering_utils_bonus___.c \
+		src_bonus/render_bonus/rendering_utils_bonus____.c
 
 OBJS = $(SRCS:.c=.o)
 OBJS_BONUS = $(SRCS_BONUS:.c=.o)
