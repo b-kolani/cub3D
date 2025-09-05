@@ -21,8 +21,11 @@ SRCS = src/cub3d.c utils/error.c utils/ft_strlen.c \
 		src/parsing/parse_elements.c src/parsing/check_map.c \
 		utils/ft_substr.c utils/ft_calloc.c \
 		utils/ft_bzero.c utils/ft_memset.c \
+		src/parsing/validate_config_utils.c \
 		src/parsing/validate_config.c src/parsing/validate_map.c \
 		src/parsing/parse_elements_utils.c src/parsing/flood_fill.c \
+		src/parsing/parse_elements_utils_1.c \
+		src/parsing/utils.c \
 		src/render/rendering.c src/init/init_mlx.c src/render/render_utils.c \
 		src/render/raycasting.c src/render/raycasting_utils.c \
 		src/player/movement.c src/player/movement_utils.c \

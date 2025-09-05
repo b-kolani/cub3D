@@ -6,7 +6,11 @@
 /*   By: bkolani <bkolani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 17:40:55 by oait-si-          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/09/03 20:18:20 by bkolani          ###   ########.fr       */
+=======
+/*   Updated: 2025/09/05 13:19:26 by oait-si-         ###   ########.fr       */
+>>>>>>> fddb11d822baa0b625cedaa2bb1dc777ff361cc4
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +75,13 @@ int	is_map_desc_line(const char *line)
 	if (is_empty_line(line))
 		return (0);
 	return (1);
+}
+
+void	init_values_to_iterate_on_line(int *i, int *map_started,
+			int *first_map_line, int *last_map_line)
+{
+	*i = -1;
+	*map_started = 0;
+	*first_map_line = -1;
+	*last_map_line = -1;
 }

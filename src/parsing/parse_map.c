@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 21:44:50 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/02 21:46:18 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 11:11:38 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,56 @@ int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
 
 	map_desc_len = 0;
 	if (ft_strncmp(filename + (ft_strlen(filename) - 4), ".cub", 4))
-		return (print_err("File error: invalid file; need .cub extension file\n"));
+		return (print_err("Error: invalid file; need .cub extension file\n"));
 	lines = read_map_file_lines(filename, gc);
 	if (!lines)
 		return (1);
-	if (parse_elements(config, gc, lines, &map_desc_len) || validate_config(config, gc)
+	if (parse_elements(config, gc, lines, &map_desc_len)
+		|| validate_config(config, gc)
 		|| validate_map(config, gc, map_desc_len))
 		return (-1);
-	config->map.grid[(int)config->player.pos.y][(int)config->player.pos.x] = '0';
+	config->map.grid
+	[(int)config->player.pos.y][(int)config->player.pos.x] = '0';
+	return (0);
+}
+
+int	ft_check_set(char c, char const *set)
+{
+	int	i;
+
+	i = 0;
+	while (set[i])
+	{
+		if (set[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	parse_color(const char *line, t_config *config, char conf_type, t_gc *gc)
+{
+	char	**rgb;
+	int		rgb_int[3];
+	size_t	len;
+
+	rgb = ft_split(gc, line, ',');
+	len = 0;
+	if (check_for_an_empty_space_in(rgb))
+		return (-1);
+	while (rgb[len])
+		len++;
+	if (parse_color_helper(rgb, rgb_int, gc, len))
+		return (-1);
+	if (rgb_int[0] < 0 || rgb_int[0] > 255
+		|| rgb_int[1] < 0 || rgb_int[1] > 255
+		|| rgb_int[2] < 0 || rgb_int[2] > 255)
+		return (print_err("Error: Each color need to be between 0 and 255\n"));
+	if (conf_type == 'F')
+		config->floor_color = (rgb_int[0] << 16)
+			| (rgb_int[1] << 8) | rgb_int[2];
+	else
+		config->ceil_color = (rgb_int[0] << 16)
+			| (rgb_int[1] << 8) | rgb_int[2];
 	return (0);
 }
