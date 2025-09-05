@@ -50,6 +50,10 @@ int rendering(t_game *game)
     //     printf("Ok!: %s\n", game->config.no);
     // else
     //     printf("Wrong!: %s\n", game->config.no);
+    printf("%s---\n", game->config.no);
+    printf("%s---\n", game->config.so);
+    printf("%s----\n", game->config.ea);
+    printf("%s----\n", game->config.we);
     game->textures[NORTH] = load_texture(game, game->config.no);
     game->textures[SOUTH] = load_texture(game, game->config.so);
     game->textures[EAST] = load_texture(game, game->config.ea);

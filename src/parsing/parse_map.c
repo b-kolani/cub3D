@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 21:44:50 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 21:36:01 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 11:11:38 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	ft_check_set(char c, char const *set)
 	}
 	return (0);
 }
+
 int	parse_color(const char *line, t_config *config, char conf_type, t_gc *gc)
 {
 	char	**rgb;
@@ -112,8 +113,10 @@ int	parse_color(const char *line, t_config *config, char conf_type, t_gc *gc)
 		|| rgb_int[2] < 0 || rgb_int[2] > 255)
 		return (print_err("Error: Each color need to be between 0 and 255\n"));
 	if (conf_type == 'F')
-		config->floor_color = (rgb_int[0] << 16) | (rgb_int[1] << 8) | rgb_int[2];
+		config->floor_color = (rgb_int[0] << 16)
+			| (rgb_int[1] << 8) | rgb_int[2];
 	else
-		config->ceil_color = (rgb_int[0] << 16) | (rgb_int[1] << 8) | rgb_int[2];
+		config->ceil_color = (rgb_int[0] << 16)
+			| (rgb_int[1] << 8) | rgb_int[2];
 	return (0);
 }

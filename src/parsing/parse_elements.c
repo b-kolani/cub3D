@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 21:41:03 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 21:40:11 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 11:07:55 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*clean_path(const char *line, t_gc *gc)
 	return (trimmed);
 }
 
-static int	get_element_path(const char *line, t_config *config, t_gc *gc)
+int	get_element_path(const char *line, t_config *config, t_gc *gc)
 {
 	if (!ft_strncmp(line, "NO ", 3) && config->no == NULL)
 		config->no = clean_path(line + 3, gc);
@@ -65,10 +65,10 @@ int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 {
 	int	i;
 	int	map_started;
-	int	first_map_line;
-	int	last_map_line;
+	int	f_map_line;
+	int	l_map_line;
 
-	init_values_for_iterate_on_line(&i, &map_started, &first_map_line, &last_map_line);
+	init_values_to_iterate_on_line(&i, &map_started, &f_map_line, &l_map_line);
 	while (lines[++i])
 	{
 		if (is_map_config_line(lines[i]))
@@ -79,13 +79,13 @@ int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 		else if (is_map_desc_line(lines[i]))
 		{
 			handle_vals_to_check_for_empty_line(&i, &map_started,
-				&first_map_line, &last_map_line);
+				&f_map_line, &l_map_line);
 			(*map_len)++;
 		}
 		else if (!is_empty_line(lines[i]))
 			return (print_err("Error: Invalid configuration line!\n"));
 	}
-	if (*map_len > 0 && *map_len != (size_t)(last_map_line - first_map_line + 1))
+	if (*map_len > 0 && *map_len != (size_t)(l_map_line - f_map_line + 1))
 		return (print_err("Error: Empty lines inside map description!\n"));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 17:42:06 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 17:18:57 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 13:26:37 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@ static void	init_directions(int dx[4], int dy[4])
 	dy[3] = -1;
 }
 
-static void	add_neighbors(t_point *q, int *back, t_point p, int dx[4], int dy[4])
+static void	add_neighbors(t_queue *q, t_point p, int dx[4], int dy[4])
 {
 	int	i;
 
 	i = -1;
 	while (++i < 4)
 	{
-		if (*back >= q->max_size)
+		if (q->back >= q->max_size)
 			return ;
-		q[*back].x = p.x + dx[i];
-		q[*back].y = p.y + dy[i];
-		(*back)++;
+		q->data[q->back].x = p.x + dx[i];
+		q->data[q->back].y = p.y + dy[i];
+		q->back++;
 	}
 }
 
@@ -46,37 +46,37 @@ int	check_for_invalide_char(char **tmp_map, t_point p)
 		|| tmp_map[p.y][p.x] == 'W');
 }
 
-void 	init_vars(int *front, int *back)
+static int	process_point(t_bfs_args *args, t_point p,
+	t_queue *q, int dxdy[2][4])
 {
-	*front = 0;
-	*back = 0;
+	if (p.x < 0 || p.y < 0 || p.x >= args->config->map.width
+		|| p.y >= args->config->map.height)
+		return (1);
+	if (args->tmp_map[p.y][p.x] == '1' || args->tmp_map[p.y][p.x] == 'F')
+		return (1);
+	if (check_for_invalide_char(args->tmp_map, p))
+		return (0);
+	args->tmp_map[p.y][p.x] = 'F';
+	add_neighbors(q, p, dxdy[0], dxdy[1]);
+	return (1);
 }
 
-int	flood_fill_space_bfs(t_gc *gc, t_config *config, char **tmp_map, int x, int y)
+int	flood_fill_space_bfs(t_bfs_args *args, int x, int y)
 {
-	t_point	*q;
-	int		front;
-	int		back;
-	int		dx[4];
-	int		dy[4];
+	t_queue	q;
+	int		dxdy[2][4];
 	t_point	p;
 
-	q = gc_malloc(gc, config->map.height * config->map.width * sizeof(t_point));
-	init_vars(&front, &back);
-	init_directions(dx, dy);
-	q[back++] = (t_point){x, y, config->map.height * config->map.width};
-	while (front < back)
+	q.max_size = args->config->map.height * args->config->map.width;
+	q.data = gc_malloc(args->gc, q.max_size * sizeof(t_point));
+	init_vars(&q.front, &q.back);
+	init_directions(dxdy[0], dxdy[1]);
+	q.data[q.back++] = (t_point){x, y};
+	while (q.front < q.back)
 	{
-		p = q[front++];
-		if (p.x < 0 || p.y < 0 || p.x >= config->map.width
-			|| p.y >= config->map.height)
-			continue ;
-		if (tmp_map[p.y][p.x] == '1' || tmp_map[p.y][p.x] == 'F')
-			continue ;
-		if (check_for_invalide_char(tmp_map, p))
+		p = q.data[q.front++];
+		if (!process_point(args, p, &q, dxdy))
 			return (0);
-		tmp_map[p.y][p.x] = 'F';
-		add_neighbors(q, &back, p, dx, dy);
 	}
 	return (1);
 }

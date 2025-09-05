@@ -60,10 +60,17 @@ typedef	struct s_config {
 
 typedef struct s_point
 {
-	int	x;
-	int	y;
+	int x;
+	int y;
+}t_point;
+
+typedef struct s_queue
+{
+	t_point *data;
 	int max_size;
-}	t_point;
+	int front;
+	int back;
+}	t_queue;
 
 typedef struct s_img {
 	void	*img_ptr; // Image créee en mémoire avec mlx_new_image
@@ -137,6 +144,12 @@ typedef	struct s_game {
 	double		rot_speed;
 }	t_game;
 
+typedef struct s_bfs_args
+{
+	t_gc *gc;
+	t_config *config;
+	char **tmp_map;
+} t_bfs_args;
 // MEMORY MANAGEMENT
 void	*gc_malloc(t_gc *gc, size_t size);
 void	gc_free(t_game *game);
@@ -157,8 +170,21 @@ int 	ft_isspace(const char c);
 char	*ft_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 void	*ft_calloc(size_t count, size_t size);
 void	ft_bzero(void *s, size_t len);
+void	init_vars(int *front, int *back);
 void	*ft_memset(void *b, int c, size_t len);
-
+int	normalized(char **config_map, char **tmp, t_gc *gc, size_t max_len);
+void	init_values_to_iterate_on_line(int *i, int *map_started,
+		int *first_map_line, int *last_map_line);
+void	handle_vals_to_check_for_empty_line(int *i, int *map_started,
+		int *first_map_line, int *last_map_line);
+int		set_config(t_config *config, t_gc *gc, size_t map_len);
+int	my_access(char *path);
+void	set_plane(t_player *player, double x, double y);
+int	ft_check_set(char c, char const *set);
+int	get_element_path(const char *line, t_config *config, t_gc *gc);
+int	check_for_an_empty_space_in(char **rgb);
+int	handle_config_line_err(t_config *config, t_gc *gc, char *line, int map_started);
+int	parse_color(const char *line, t_config *config, char conf_type, t_gc *gc);
 // PARSING UTILS FUNCTIONS
 int		parse_color_helper(char **rgb, int *rgb_int, t_gc *gc, size_t len);
 int 	is_color_line(const char *line);
@@ -167,19 +193,22 @@ int 	is_path_line(const char *line);
 int		is_map_config_line(const char *line);
 int		is_map_desc_line(const char *line);
 int		is_empty_line(const char *line);
-int	   flood_fill_space_bfs(t_gc *gc, t_config *config, char **tmp_map, int x, int y);
-
-// int 	flood_fill_space(t_config *config, char **tmp_map, int x, int y);
+int	   flood_fill_space_bfs(t_bfs_args *args, int x, int y);
+void	set_direction(t_player *player, char dir);
 void    set_player_x_pos(t_config *config, char *pos_line);
 void	set_player_orientation(t_player *player, char *pos_line);
-
+int	handle_config_line(t_config *config, t_gc *gc, char *line);
+char	*clean_path(const char *line, t_gc *gc);
 // PARSING FUNCTIONS
 int 	validate_config(t_config *config, t_gc *gc);
 int		validate_map(t_config *config, t_gc *gc, size_t map_len);
 void    fetch_map_desc_lines(char **grid, char **lines, t_gc *gc);
 int		parse_cub3d_map(t_config *config, t_gc *gc, const char *filename);
 int 	parse_elements(t_config *config, t_gc *gc, char **lines, size_t *map_len);
-
+size_t	find_max_width(t_config *config);
+int	check_player_count(char **tmp_map, int *player_count, int i);
+int	check_first_last_rows(t_map map, int i);
+int	check_middle_rows(t_map map, int i);
 // RENDER FUNCTIONS
 int 	rendering(t_game *game);
 int		ft_init_mlx(t_mlx *mlx);

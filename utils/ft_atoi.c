@@ -6,32 +6,45 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 13:19:21 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/03 13:19:22 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:21:23 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+// static int	check_over(long res, char digit_char, int neg)
+// {
+// 	long	next_res;
+
+// 	next_res = res * 10 + (digit_char - '0');
+// 	if ((neg == 1 && next_res < res) || (neg == -1 && next_res < res))
+// 		return(-1);
+// 	return (1);
+// }
+
 int	ft_atoi(const char *str)
 {
 	int		i;
-	int		sign;
-	long	number;
+	int		neg;
+	long	res;
 
 	i = 0;
-	sign = 1;
-	while (('\t' <= str[i] && str[i] <= '\r') || (str[i] == ' '))
+	neg = 1;
+	res = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
-		if (str[i++] == '-')
-			sign = -sign;
-	number = 0;
+	{
+		if (str[i] == '-')
+			return -1;
+		i++;
+	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		number = 10 * number;
-		if (number < number / 10)
-			return (-(sign > 0));
-		number += str[i++] - '0';
+		if(res * 10 + (str[i] - '0') > 255)
+			return -1;
+		res = (res * 10) + (str[i] - '0');
+		i++;
 	}
-	return (sign * number);
+	return (res * neg);
 }

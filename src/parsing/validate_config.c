@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 21:48:40 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 18:07:06 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 13:16:59 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,19 @@ int	validate_config(t_config *config, t_gc *gc)
 		|| my_access(config->ea) || my_access(config->we))
 	{
 		return (print_err("Map error: Invalid path; file not found!\n"));
+	}
+	return (0);
+}
+
+int	check_first_last_rows(t_map map, int i)
+{
+	int	j;
+
+	j = -1;
+	while (map.grid[i][++j])
+	{
+		if (map.grid[i][j] != '1' && !ft_isspace(map.grid[i][j]))
+			return (print_err("Map error: walls required!\n"));
 	}
 	return (0);
 }

@@ -6,23 +6,14 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 18:09:00 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 21:21:36 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 13:19:13 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-void	init_values_for_iterate_on_line(int *i, int *map_started,
-		int *first_map_line, int *last_map_line)
-{
-	*i = -1;
-	*map_started = 0;
-	*first_map_line = -1;
-	*last_map_line = -1;
-}
-
 void	handle_vals_to_check_for_empty_line(int *i, int *map_started,
-		int *first_map_line, int *last_map_line)
+			int *first_map_line, int *last_map_line)
 {
 	if (*map_started == 0)
 		*map_started = 1;
@@ -38,39 +29,47 @@ int	set_config(t_config *config, t_gc *gc, size_t map_len)
 	return (0);
 }
 
-int	check_for_an_empty_space_in(char **rgb)
+static int	check_rgb_string(char *tmp)
 {
-	int		i;
-	int		j;
-	char	*tmp;
-	int		flag_for_char;
-	int		flag_for_space;
+	int	j;
+	int	num_started;
+	int	space_after_num;
 
-	i = 0;
-	while (rgb[i])
+	j = 0;
+	num_started = 0;
+	space_after_num = 0;
+	while (tmp[j] && ft_isspace(tmp[j]))
+		j++;
+	while (tmp[j])
 	{
-		tmp = rgb[i];
-		j = 0;
-		flag_for_char = 0;
-		flag_for_space = 0;
-		while (tmp[j] && ft_isspace(tmp[j]))
-			j++;
-		while (tmp[j])
-		{
-			if (!ft_isspace(tmp[j]))
-				flag_for_char = 1;
-			if (ft_isspace(tmp[j]) && flag_for_char)
-				flag_for_space = 1;
-			if (!ft_isspace(tmp[j]) && flag_for_space)
-				return (print_err("Error: invalid Number in the color \n"));
-			j++;
-		}
-		i++;
+		if (!ft_isspace(tmp[j]) && !num_started)
+			num_started = 1;
+		if (ft_isspace(tmp[j]) && num_started)
+			space_after_num = 1;
+		if (!ft_isspace(tmp[j]) && space_after_num)
+			return (1);
+		j++;
 	}
 	return (0);
 }
 
-int	handle_config_line_err(t_config *config, t_gc *gc, char *line, int map_started)
+int	check_for_an_empty_space_in(char **rgb)
+{
+	int		i;
+	char	*tmp;
+
+	i = -1;
+	while (rgb[++i])
+	{
+		tmp = rgb[i];
+		if (check_rgb_string(tmp))
+			return (print_err("Error: invalid Number in the color\n"));
+	}
+	return (0);
+}
+
+int	handle_config_line_err(t_config *config, t_gc *gc, char *line,
+		int map_started)
 {
 	if (map_started)
 		return (print_err("Map error: Configuration lines inside "
