@@ -6,11 +6,33 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 11:33:04 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 14:57:41 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/17 22:13:14 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+int	count_comma(const char *line)
+{
+	int	count;
+	int	i;
+
+	i = -1;
+	count = 0;
+	while (line[++i])
+	{
+		if (line[i] == ',')
+			count++;
+		if (count >= 3)
+			return (1);
+	}
+	return (0);
+}
+
+int	is_valid(char *str)
+{
+	return (ft_strncmp(str + (ft_strlen(str) - 4), ".xpm", 4));
+}
 
 int	main(int ac, const char **av)
 {
@@ -36,6 +58,5 @@ int	main(int ac, const char **av)
 		return (-1);
 	}
 	gc_free(game);
-	
 	return (0);
 }

@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkolani <bkolani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 21:41:03 by oait-si-          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/09/03 20:45:02 by bkolani          ###   ########.fr       */
-=======
-/*   Updated: 2025/09/05 11:07:55 by oait-si-         ###   ########.fr       */
->>>>>>> fddb11d822baa0b625cedaa2bb1dc777ff361cc4
+/*   Updated: 2025/09/17 16:33:22 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +49,25 @@ char	*clean_path(const char *line, t_gc *gc)
 int	get_element_path(const char *line, t_config *config, t_gc *gc)
 {
 	if (!ft_strncmp(line, "NO ", 3) && config->no == NULL)
+	{
 		config->no = clean_path(line + 3, gc);
+		config->last_map.no_path_flag = 1;
+	}
 	else if (!ft_strncmp(line, "SO ", 3) && config->so == NULL)
+	{
 		config->so = clean_path(line + 3, gc);
+		config->last_map.so_path_flag = 1;
+	}
 	else if (!ft_strncmp(line, "EA ", 3) && config->ea == NULL)
+	{
 		config->ea = clean_path(line + 3, gc);
+		config->last_map.ea_path_flag = 1;
+	}
 	else if (!ft_strncmp(line, "WE ", 3) && config->we == NULL)
+	{
 		config->we = clean_path(line + 3, gc);
+		config->last_map.we_path_flag = 1;
+	}
 	else
 		return (print_err("Error: Element configuration line duplicated!\n"));
 	return (0);
@@ -67,29 +75,23 @@ int	get_element_path(const char *line, t_config *config, t_gc *gc)
 
 int	iterate_on_lines(t_config *config, t_gc *gc, char **lines, size_t *map_len)
 {
-	int	i;
-	int	map_started;
-	int	f_map_line;
-	int	l_map_line;
+	t_iter_state	list;
+	t_parse_ctx		context;
 
-	init_values_to_iterate_on_line(&i, &map_started, &f_map_line, &l_map_line);
-	while (lines[++i])
+	init_values_to_iterate_on_line(&list.i, &list.map_started,
+		&list.f_map_line, &list.l_map_line);
+	context.config = config;
+	context.gc = gc;
+	context.lines = lines;
+	context.state = &list;
+	context.map_len = map_len;
+	while (lines[++list.i])
 	{
-		if (is_map_config_line(lines[i]))
-		{
-			if (handle_config_line_err(config, gc, lines[i], map_started))
-				return (-1);
-		}
-		else if (is_map_desc_line(lines[i]))
-		{
-			handle_vals_to_check_for_empty_line(&i, &map_started,
-				&f_map_line, &l_map_line);
-			(*map_len)++;
-		}
-		else if (!is_empty_line(lines[i]))
-			return (print_err("Error: Invalid configuration line!\n"));
+		if (process_line(&context))
+			return (-1);
 	}
-	if (*map_len > 0 && *map_len != (size_t)(l_map_line - f_map_line + 1))
+	if (*map_len > 0 && *map_len
+		!= (size_t)(list.l_map_line - list.f_map_line + 1))
 		return (print_err("Error: Empty lines inside map description!\n"));
 	return (0);
 }

@@ -6,21 +6,11 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 13:19:21 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 13:21:23 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 14:20:17 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-// static int	check_over(long res, char digit_char, int neg)
-// {
-// 	long	next_res;
-
-// 	next_res = res * 10 + (digit_char - '0');
-// 	if ((neg == 1 && next_res < res) || (neg == -1 && next_res < res))
-// 		return(-1);
-// 	return (1);
-// }
 
 int	ft_atoi(const char *str)
 {
@@ -36,13 +26,13 @@ int	ft_atoi(const char *str)
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-			return -1;
+			return (-1);
 		i++;
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if(res * 10 + (str[i] - '0') > 255)
-			return -1;
+		if (res * 10 + (str[i] - '0') > 255)
+			return (-1);
 		res = (res * 10) + (str[i] - '0');
 		i++;
 	}

@@ -1,69 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_elements_utils_bonus.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 15:29:43 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/17 22:16:00 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_bonus.h"
 
-int parse_color_helper(char **rgb, int *rgb_int, t_gc *gc, size_t len)
+int	is_path_line(const char *line)
 {
-    if (len < 3 || len > 3)
-    {
-        free_split_alloc(rgb);
-        return (print_err("Map error: Only 3 integers needed for a color!\n"));
-    }
-    if (!is_color_integer(rgb[0], &rgb_int[0], gc) 
-        || !is_color_integer(rgb[1], &rgb_int[1], gc)
-        || !is_color_integer(rgb[2], &rgb_int[2], gc))
-    {
-        free_split_alloc(rgb);
-        return (print_err("Map error: Only digits are needed for each color!\n"));
-    }
-    return (0);
+	if (!ft_strncmp(line, "NO ", 3) || !ft_strncmp(line, "SO ", 3)
+		|| !ft_strncmp(line, "EA ", 3) || !ft_strncmp(line, "WE ", 3))
+		return (1);
+	return (0);
 }
 
-int is_color_line(const char *line)
+int	check_rgb_string(char *tmp)
 {
-    if (ft_strncmp(line, "F ", 2) && ft_strncmp(line, "C ", 2))
-        return (0);
-    return (1);
+	int	j;
+	int	num_started;
+	int	space_after_num;
+
+	j = 0;
+	num_started = 0;
+	space_after_num = 0;
+	while (tmp[j] && ft_isspace(tmp[j]))
+		j++;
+	while (tmp[j])
+	{
+		if (!ft_isspace(tmp[j]) && !num_started)
+			num_started = 1;
+		if (ft_isspace(tmp[j]) && num_started)
+			space_after_num = 1;
+		if (!ft_isspace(tmp[j]) && space_after_num)
+			return (1);
+		j++;
+	}
+	if (!num_started && !space_after_num)
+		return (1);
+	return (0);
 }
 
-int is_color_integer(char *color, int *rgb_int, t_gc *gc)
+int	check_for_an_empty_space_in(char **rgb)
 {
-    size_t i;
-    char    *str_without_new_line;
+	int		i;
+	char	*tmp;
 
-    i = 0;
-    str_without_new_line = NULL;
-    while(i < ft_strlen(color))
-    {
-        if (!(color[i] >= '0' && color[i] <= '9') 
-            && color[i] != '\n' && color[i] != '-'
-            && color[i] != '+')
-            return (0);
-        if (color[i] == '\n') {
-            str_without_new_line = ft_substr(color, 0, i, gc);
-            break ;
-        }
-        i++;
-    } 
-    if (str_without_new_line != NULL)
-        *rgb_int = ft_atoi(str_without_new_line);
-    else
-        *rgb_int = ft_atoi(color);
-    return (1);
+	i = -1;
+	while (rgb[++i])
+	{
+		tmp = rgb[i];
+		if (check_rgb_string(tmp))
+			return (print_err("Error: invalid Number in the color\n"));
+	}
+	return (0);
 }
 
-int is_path_line(const char *line)
+void	handle_vals_to_check_for_empty_line(int *i, int *map_started,
+			int *first_map_line, int *last_map_line)
 {
-    if (!ft_strncmp(line, "NO ", 3) || !ft_strncmp(line, "SO ", 3)
-        || !ft_strncmp(line, "EA ", 3) || !ft_strncmp(line, "WE ", 3))
-            return (1);
-    return (0);
+	if (*map_started == 0)
+		*map_started = 1;
+	if (*first_map_line == -1)
+		*first_map_line = *i;
+	*last_map_line = *i;
 }
 
-void    free_split_alloc(char **arr)
+int	is_last(t_parse_ctx *context)
 {
-    int i;
-
-    i = -1;
-    while (arr[++i])
-        free(arr[i]);
-    free(arr);
+	return (!context->config->last_map.we_path_flag
+		|| !context->config->last_map.so_path_flag
+		|| !context->config->last_map.f_color_flag
+		|| !context->config->last_map.c_color_flag
+		|| !context->config->last_map.no_path_flag
+		|| !context->config->last_map.ea_path_flag);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   events_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkolani <bkolani@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 15:18:42 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/09 13:20:26 by bkolani          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_bonus.h"
 
 t_door	*get_door_in_front_of_player(t_config *config)
@@ -17,41 +29,41 @@ t_door	*get_door_in_front_of_player(t_config *config)
 
 int	key_press(int keycode, t_game *game)
 {
-	if (keycode == 119 || keycode == 13)
+	if (keycode == 13)
 		game->keys.w = 1;
-	else if (keycode == 97 || keycode == 0)
+	else if (keycode == 0)
 		game->keys.a = 1;
-	else if (keycode == 115 || keycode == 1)
+	else if (keycode == 1)
 		game->keys.s = 1;
-	else if (keycode == 100 || keycode == 2)
+	else if (keycode == 2)
 		game->keys.d = 1;
-	else if (keycode == 65361 || keycode == 123)
+	else if (keycode == 123)
 		game->keys.left = 1;
-	else if (keycode == 65363 || keycode == 124)
+	else if (keycode == 124)
 		game->keys.right = 1;
 	else if (keycode == 76)
 		open_door(game);
-	else if (keycode == 65307 || keycode == 53)
+	else if (keycode == 53)
 		close_window(game);
 	return (0);
 }
 
 int	key_release(int keycode, t_game *game)
 {
-	if (keycode == 119 || keycode == 13)
+	if (keycode == 13)
 		game->keys.w = 0;
-	else if (keycode == 97 || keycode == 0)
+	else if (keycode == 0)
 		game->keys.a = 0;
-	else if (keycode == 115 || keycode == 1)
+	else if (keycode == 1)
 		game->keys.s = 0;
-	else if (keycode == 100 || keycode == 2)
+	else if (keycode == 2)
 		game->keys.d = 0;
-	else if (keycode == 65361 || keycode == 123)
+	else if (keycode == 123)
 		game->keys.left = 0;
-	else if (keycode == 65363 || keycode == 124)
+	else if (keycode == 124)
 		game->keys.right = 0;
 	else if (keycode == 76)
-		game->keys.right = 0;
+		game->keys.enter = 0;
 	return (0);
 }
 

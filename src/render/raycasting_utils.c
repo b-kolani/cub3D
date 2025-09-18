@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting_utils.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkolani <bkolani@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 13:53:32 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/09/05 17:11:36 by bkolani          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
 int	apply_shadow(int color, double distance, int side)
@@ -84,22 +96,13 @@ int	initialize_texture(t_ray *ray, t_img *texture, t_config *config)
 	return (0);
 }
 
-void	draw_column_check(t_ray *ray)
-{
-	if (ray->column.draw_start < 0)
-		ray->column.draw_start = 0;
-	if (ray->column.draw_end >= HEIGHT)
-		ray->column.draw_end = HEIGHT - 1;
-}
-
 int	draw_column(t_ray *ray, t_game *game, int x)
 {
 	int		y;
 	t_img	*texture;
 
 	texture = get_dir_texture(ray, game->textures);
-	draw_column_check(ray);
-	if (initialize_texture(ray, texture, &game->config))
+	if (draw_col_checker(game, texture, ray))
 		return (-1);
 	y = ray->column.draw_start;
 	while (y <= ray->column.draw_end)
@@ -112,8 +115,8 @@ int	draw_column(t_ray *ray, t_game *game, int x)
 		texture->tex_pos += texture->step;
 		ray->column.color = get_texture_pixels(texture, texture->tex_x,
 				texture->tex_y);
-		ray->column.color = apply_shadow(ray->column.color,
-				ray->perp_wall_dist, ray->side);
+		ray->column.color = apply_shadow(ray->column.color, ray->perp_wall_dist,
+				ray->side);
 		if (put_pixel(&game->mlx.screen, x, y, ray->column.color))
 			return (print_err("Ray casting error\n"));
 		y++;

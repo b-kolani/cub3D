@@ -1,2 +1,0 @@
-- check the xpm extension before validate the file
-- case of the file has no permission

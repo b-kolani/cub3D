@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 13:25:20 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/17 22:09:45 by oait-si-         ###   ########.fr       */
+/*   Created: 2025/09/05 17:03:39 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/17 22:21:35 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../../includes/cub3d_bonus.h"
 
 int	check_middle_rows(t_map map, int i, t_gc *gc)
 {
@@ -30,14 +30,33 @@ void	init_vars(int *front, int *back)
 	*back = 0;
 }
 
-int	is_last(t_parse_ctx *context)
+int	find_player_position(t_config *config, char **tmp_map)
 {
-	return (!context->config->last_map.we_path_flag
-		|| !context->config->last_map.so_path_flag
-		|| !context->config->last_map.f_color_flag
-		|| !context->config->last_map.c_color_flag
-		|| !context->config->last_map.no_path_flag
-		|| !context->config->last_map.ea_path_flag);
+	int	i;
+	int	player_count;
+
+	i = -1;
+	player_count = 0;
+	while (tmp_map[++i])
+	{
+		if (check_player_count(tmp_map, &player_count, i))
+			return (-1);
+		if (player_count == 1 && (ft_strchr(tmp_map[i], 'N')
+				|| ft_strchr(tmp_map[i], 'S') || ft_strchr(tmp_map[i], 'E')
+				|| ft_strchr(tmp_map[i], 'W')))
+			set_player_details(config, tmp_map, i);
+	}
+	if (player_count == 0)
+		return (print_err("Error: Player not found\n"));
+	return (0);
+}
+
+int	is_door_valide(char **grid, int x, int y)
+{
+	if (((grid[y][x - 1] == '1' && grid[y][x + 1] == '1')
+		|| (grid[y + 1][x] == '1' && grid[y - 1][x] == '1')))
+		return (0);
+	return (1);
 }
 
 int	process_line(t_parse_ctx *context)
@@ -66,14 +85,4 @@ int	process_line(t_parse_ctx *context)
 	else if (!is_empty_line(context->lines[i]))
 		return (print_err("Error: Invalid configuration line!\n"));
 	return (0);
-}
-
-int	is_hidden(const char *path)
-{
-	const char	*base;
-
-	base = path + ft_strlen(path);
-	while (base > path && *(base - 1) != '/')
-		base--;
-	return (base[0] == '.');
 }

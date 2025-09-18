@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 21:44:50 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/05 11:11:38 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/17 22:07:07 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,13 @@ static char	**read_map_file_lines(const char *filename, t_gc *gc)
 
 int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
 {
-	char	**lines;
-	size_t	map_desc_len;
+	char		**lines;
+	size_t		map_desc_len;
 
 	map_desc_len = 0;
-	if (ft_strncmp(filename + (ft_strlen(filename) - 4), ".cub", 4))
-		return (print_err("Error: invalid file; need .cub extension file\n"));
+	if (ft_strncmp(filename + (ft_strlen(filename) - 4), ".cub", 4)
+		|| is_hidden(filename))
+		return (print_err("Error: invalid file name need \'filename.cub\'\n"));
 	lines = read_map_file_lines(filename, gc);
 	if (!lines)
 		return (1);
@@ -75,8 +76,8 @@ int	parse_cub3d_map(t_config *config, t_gc *gc, const char *filename)
 		|| validate_config(config, gc)
 		|| validate_map(config, gc, map_desc_len))
 		return (-1);
-	config->map.grid
-	[(int)config->player.pos.y][(int)config->player.pos.x] = '0';
+	config->map.grid[(int)config->player.pos.y]
+	[(int)config->player.pos.x] = '0';
 	return (0);
 }
 
@@ -100,6 +101,8 @@ int	parse_color(const char *line, t_config *config, char conf_type, t_gc *gc)
 	int		rgb_int[3];
 	size_t	len;
 
+	if (count_comma(line))
+		return (print_err("Error: only 3 Numbers for colors\n"));
 	rgb = ft_split(gc, line, ',');
 	len = 0;
 	if (check_for_an_empty_space_in(rgb))

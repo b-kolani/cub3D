@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   movement.c                                         :+:      :+:    :+:   */
+/*   render_utils_.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bkolani <bkolani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/05 13:46:35 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/08 17:44:27 by bkolani          ###   ########.fr       */
+/*   Created: 2025/09/05 17:12:34 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/05 17:44:38 by bkolani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-int	update_player(t_game *game)
+int	draw_col_checker(t_game *game, t_img *texture, t_ray *ray)
 {
-	game->move_speed = 0.1;
-	game->rot_speed = 0.05;
-	if (game->keys.w)
-		move_forward(game);
-	if (game->keys.s)
-		move_backward(game);
-	if (game->keys.a)
-		strafe_left(game);
-	if (game->keys.d)
-		strafe_right(game);
-	if (game->keys.left)
-		rotate_left(game);
-	if (game->keys.right)
-		rotate_right(game);
+	if (ray->column.draw_start < 0)
+		ray->column.draw_start = 0;
+	if (ray->column.draw_end >= HEIGHT)
+		ray->column.draw_end = HEIGHT - 1;
+	if (initialize_texture(ray, texture, &game->config))
+		return (-1);
 	return (0);
 }

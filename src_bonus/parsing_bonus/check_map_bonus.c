@@ -1,63 +1,85 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map_bonus.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 15:24:44 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/17 22:16:41 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_bonus.h"
 
-// Recuperer toutes lignes de description de
-// la carte
-void    fetch_map_desc_lines(t_config *config, char **lines, t_gc *gc)
+void	fetch_map_desc_lines(t_config *config, char **lines, t_gc *gc)
 {
-    int i;
-    int j;
+	int	i;
+	int	j;
 
-    i = -1;
-    j = -1;
-    while (lines[++i])
-    {
-        if (is_map_desc_line(lines[i]))
-            config->map.grid[++j] = ft_substr(lines[i], 0, ft_strlen(lines[i]), gc);
-    }
-    config->map.grid[++j] = NULL;
+	i = -1;
+	j = -1;
+	while (lines[++i])
+	{
+		if (is_map_desc_line(lines[i]))
+			config->map.grid[++j] = ft_substr(lines[i],
+					0, ft_strlen(lines[i]), gc);
+	}
+	config->map.grid[++j] = NULL;
 }
 
-// Verifier si une ligne de la carte est vide ou pas
 int	is_empty_line(const char *line)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while(line[++i])
-    {
-        if (!ft_isspace(line[i]))
-            return (0);
-    }
-    return (1);
+	i = -1;
+	while (line[++i])
+	{
+		if (!ft_isspace(line[i]))
+			return (0);
+	}
+	return (1);
 }
 
-// Verifier si une ligne est une configuration ou pas
-int	is_map_config_line(const char *line)
+int	is_map_config_line(const char *line, t_gc *gc)
 {
-    if (ft_strncmp(line, "NO ", 3) != 0 && ft_strncmp(line, "SO ", 3) != 0
-        && ft_strncmp(line, "EA ", 3) != 0 && ft_strncmp(line, "WE ", 3) != 0
-        && ft_strncmp(line, "F ", 2) != 0 && ft_strncmp(line, "C ", 2) != 0)
-        return (0);
-    return (1);
+	char	*trimed;
+
+	if (is_empty_line(line))
+		return (0);
+	trimed = clean_path(line, gc);
+	if (ft_strncmp(trimed, "NO ", 3) != 0 && ft_strncmp(trimed, "SO ", 3) != 0
+		&& ft_strncmp(trimed, "EA ", 3) != 0
+		&& ft_strncmp(trimed, "WE ", 3) != 0
+		&& ft_strncmp(trimed, "F ", 2) != 0 && ft_strncmp(trimed, "C ", 2) != 0)
+		return (0);
+	return (1);
 }
 
-// Verifier si une ligne est une description de la carte 
-// ou pas
 int	is_map_desc_line(const char *line)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while(line[++i])
-    {
-        if (line[i] != '1' && line[i] != '0' 
-            && !ft_isspace(line[i]) && line[i] != 'N' 
-            && line[i] != 'S' && line[i] != 'E'
-            && line[i] != 'W' && !(line[i] >= '2' && line[i] <= '9') 
-            && line[i] != 'D')
-            return (0);
-    }
-    if (is_empty_line(line))
-        return (0);
-    return (1);
+	i = -1;
+	while (line[++i])
+	{
+		if (line[i] != '1' && line[i] != '0'
+			&& !ft_isspace(line[i]) && line[i] != 'N'
+			&& line[i] != 'S' && line[i] != 'E'
+			&& line[i] != 'W' && !(line[i] == '3')
+			&& line[i] != '4')
+			return (0);
+	}
+	if (is_empty_line(line))
+		return (0);
+	return (1);
+}
+
+void	init_values_to_iterate_on_line(int *i, int *map_started,
+			int *first_map_line, int *last_map_line)
+{
+	*i = -1;
+	*map_started = 0;
+	*first_map_line = -1;
+	*last_map_line = -1;
 }

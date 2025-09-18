@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 18:09:00 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/05 13:19:13 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/17 22:05:46 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static int	check_rgb_string(char *tmp)
 			return (1);
 		j++;
 	}
+	if (!num_started && !space_after_num)
+		return (1);
 	return (0);
 }
 
@@ -71,9 +73,7 @@ int	check_for_an_empty_space_in(char **rgb)
 int	handle_config_line_err(t_config *config, t_gc *gc, char *line,
 		int map_started)
 {
-	if (map_started)
-		return (print_err("Map error: Configuration lines inside "
-				"the map description!\n"));
+	(void)map_started;
 	if (handle_config_line(config, gc, line))
 		return (-1);
 	return (0);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 13:53:59 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/09/10 18:12:53 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d.h"
 
 static void	init_ray(t_ray *ray, t_config *config, int x)
@@ -5,8 +17,10 @@ static void	init_ray(t_ray *ray, t_config *config, int x)
 	double	camera_x;
 
 	camera_x = 2 * x / (double)WIDTH - 1;
-	ray->ray_dir.x = config->player.dir.x + config->player.plane.x * camera_x;
-	ray->ray_dir.y = config->player.dir.y + config->player.plane.y * camera_x;
+	ray->ray_dir.x = config->player.dir.x + config->player.plane.x
+		* camera_x;
+	ray->ray_dir.y = config->player.dir.y + config->player.plane.y
+		* camera_x;
 	if (fabs(ray->ray_dir.x) < 1e-6)
 		ray->delta_dist.x = INFINITY;
 	else
@@ -76,4 +90,15 @@ int	raycasting(t_game *game)
 			return (-1);
 	}
 	return (0);
+}
+
+int	close_window(t_game *game)
+{
+	printf("Window closed: exiting...\n");
+	if (game->mlx.screen.img_ptr)
+		mlx_destroy_image(game->mlx.mlx_ptr, game->mlx.screen.img_ptr);
+	if (game->mlx.mlx_ptr)
+		mlx_destroy_window(game->mlx.mlx_ptr, game->mlx.win_ptr);
+	gc_free(game);
+	exit(0);
 }

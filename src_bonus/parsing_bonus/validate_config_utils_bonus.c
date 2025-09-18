@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_config_utils.c                            :+:      :+:    :+:   */
+/*   validate_config_utils_bonus.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/02 21:46:30 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/17 15:24:26 by oait-si-         ###   ########.fr       */
+/*   Created: 2025/09/05 15:32:53 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/17 17:03:38 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../../includes/cub3d_bonus.h"
 
 int	my_access(char *path)
 {

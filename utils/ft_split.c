@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 11:55:55 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/04 12:59:18 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/05 14:22:37 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,14 @@ static char	*substr(t_gc *gc, const char *s, int start, int end)
 	return (sub);
 }
 
-static char	**create_result(t_gc *gc, char const *s, char **result, char c, int start)
+static char	**create_result(t_gc *gc, char const *s,
+		char **result, char c)
 {
 	int	end;
 	int	index;
+	int	start;
 
+	start = 0;
 	index = 0;
 	while (s[start])
 	{
@@ -59,7 +62,7 @@ static char	**create_result(t_gc *gc, char const *s, char **result, char c, int 
 		end = start;
 		while (s[end] && s[end] != c)
 			end++;
-		result[index] = substr(gc,s, start, end);
+		result[index] = substr(gc, s, start, end);
 		index++;
 		start = end;
 	}
@@ -67,15 +70,14 @@ static char	**create_result(t_gc *gc, char const *s, char **result, char c, int 
 	return (result);
 }
 
-char	**ft_split(t_gc *gc ,char const *s, char c)
+char	**ft_split(t_gc *gc, char const *s, char c)
 {
 	char	**result;
-	int		start;
 
-	start = 0;
 	if (!s)
 		return (NULL);
-	result = (char **)gc_malloc(gc ,(count_substrs(s, c) + 1) * sizeof(char *));
-	result = create_result(gc ,s, result, c, start);
+	result = (char **)gc_malloc(gc, (count_substrs(s, c) + 1)
+			* sizeof(char *));
+	result = create_result(gc, s, result, c);
 	return (result);
 }

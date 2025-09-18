@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rendering_bonus.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 15:21:31 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/13 22:52:15 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_bonus.h"
 
 void	timer(t_game *game)
@@ -28,7 +40,7 @@ int	game_loop(t_game *game)
 	update_sprites_animation(game);
 	update_all_doors(&game->config);
 	render_all_sprites(game);
-	if (draw_mini_map(game))
+	if (draw_mini_map(game, game->mlx.screen))
 	{
 		gc_free(game);
 		exit(-1);
@@ -68,16 +80,12 @@ int	rendering(t_game *game)
 	game->mlx.screen.img_ptr = mlx_new_image(game->mlx.mlx_ptr, WIDTH, HEIGHT);
 	if (!game->mlx.screen.img_ptr)
 		return (print_err("mlx error: Failed to create mlx image\n"));
-	game->mlx.screen.img_data_addr = mlx_get_data_addr(
-			game->mlx.screen.img_ptr,
-			&game->mlx.screen.bits_per_pixel,
-			&game->mlx.screen.line_length,
+	game->mlx.screen.img_data_addr = mlx_get_data_addr(game->mlx.screen.img_ptr,
+			&game->mlx.screen.bits_per_pixel, &game->mlx.screen.line_length,
 			&game->mlx.screen.endian);
 	if (!game->mlx.screen.img_data_addr)
 		return (print_err("mlx error: Failed to get image address\n"));
 	game->config.z_buffer = gc_malloc(game->gc, sizeof(double) * WIDTH);
-	if (!game->config.z_buffer)
-		return (print_err("z_buffer allocation failed\n"));
 	load_wall_all_tex(game);
 	load_door_all_text(game);
 	load_all_sprites_tex(game);

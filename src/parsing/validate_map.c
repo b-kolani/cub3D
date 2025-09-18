@@ -6,7 +6,7 @@
 /*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 16:55:31 by oait-si-          #+#    #+#             */
-/*   Updated: 2025/09/05 13:26:01 by oait-si-         ###   ########.fr       */
+/*   Updated: 2025/09/12 17:16:01 by oait-si-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	detect_map_leaks(t_gc *gc, t_config *config, char **tmp)
 	return (0);
 }
 
-static int	check_walls(t_map map)
+static int	check_walls(t_map map, t_gc *gc)
 {
 	int	i;
 
@@ -51,7 +51,7 @@ static int	check_walls(t_map map)
 		}
 		else
 		{
-			if (check_middle_rows(map, i))
+			if (check_middle_rows(map, i, gc))
 				return (-1);
 		}
 	}
@@ -81,6 +81,8 @@ int	find_player_position(t_config *config, char **tmp_map)
 				|| ft_strchr(tmp_map[i], 'W')))
 			set_player_details(config, tmp_map, i);
 	}
+	if (player_count == 0)
+		return (print_err("Error: Player not found\n"));
 	return (0);
 }
 
@@ -89,7 +91,7 @@ int	validate_map(t_config *config, t_gc *gc, size_t map_len)
 	char	**tmp;
 	size_t	max_len;
 
-	if (check_walls(config->map))
+	if (check_walls(config->map, gc))
 		return (-1);
 	max_len = find_max_width(config);
 	config->map.width = max_len;

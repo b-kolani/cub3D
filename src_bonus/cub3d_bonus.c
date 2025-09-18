@@ -1,4 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: oait-si- <oait-si-@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 14:24:15 by oait-si-          #+#    #+#             */
+/*   Updated: 2025/09/17 22:22:16 by oait-si-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d_bonus.h"
+
+int	count_comma(const char *line)
+{
+	int	count;
+	int	i;
+
+	i = -1;
+	count = 0;
+	while (line[++i])
+	{
+		if (line[i] == ',')
+			count++;
+		if (count >= 3)
+			return (1);
+	}
+	return (0);
+}
 
 int	main(int ac, const char **av)
 {

@@ -1,85 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rendering_utils_bonus__.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bkolani <bkolani@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/05 15:21:51 by bkolani           #+#    #+#             */
+/*   Updated: 2025/09/08 12:49:41 by bkolani          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_bonus.h"
 
-int	draw_opened_door(t_game *game, t_door *door, int color)
+int	draw_square(t_img *img, int x, int y, int color)
 {
-	int	pixel_x;
-	int	pixel_y;
+	int	i;
+	int	j;
+	int	size;
 
-	pixel_x = door->x * CELL_SIZE;
-	pixel_y = door->y * CELL_SIZE;
-	if (door->side_hit == 1)
+	size = 9;
+	i = 0;
+	while (i < size)
 	{
-		if (draw_opened_door_side_y(game,
-				color, pixel_x, pixel_y))
-			return (-1);
-	}
-	else if (door->side_hit == 0)
-	{
-		if (draw_opened_door_side_x(game,
-				color, pixel_x, pixel_y))
-			return (-1);
+		j = 0;
+		while (j < size)
+		{
+			if (put_pixel(img, x + j, y + i, color))
+				return (-1);
+			j++;
+		}
+		i++;
 	}
 	return (0);
 }
 
-int	draw_closed_door(t_game *game, t_door *door, int color)
+// Filled circle
+int	draw_filled_circle(t_img *img, int cx, int cy, int r)
 {
-	int	pixel_x;
-	int	pixel_y;
-
-	pixel_x = door->x * CELL_SIZE;
-	pixel_y = door->y * CELL_SIZE;
-	if (door->side_hit == 1)
-	{
-		if (draw_closed_door_side_y(game, color,
-				pixel_x, pixel_y))
-			return (-1);
-	}
-	else if (door->side_hit == 0)
-	{
-		if (draw_closed_door_side_x(game, color,
-				pixel_x, pixel_y))
-			return (-1);
-	}
-	return (0);
-}
-
-int	draw_map_door_cell(t_game *game, int map_x, int map_y, int color)
-{
-	t_door	*door;
-
-	door = find_door(&game->config, map_x, map_y);
-	if (!door->is_open)
-	{
-		if (draw_closed_door(game, door, color))
-			return (-1);
-	}
-	else
-	{
-		if (draw_opened_door(game, door, color))
-			return (-1);
-	}
-	return (0);
-}
-
-int	draw_player_on_the_map(t_game *game, int color)
-{
-	int	px;
-	int	py;
 	int	y;
 	int	x;
 
-	px = game->config.player.pos.x * CELL_SIZE;
-	py = game->config.player.pos.y * CELL_SIZE;
-	y = -PLAYER_CELL_SIZE / 2;
-	while (y < PLAYER_CELL_SIZE / 2)
+	y = -r;
+	while (y <= r)
 	{
-		x = -PLAYER_CELL_SIZE / 2;
-		while (x < PLAYER_CELL_SIZE / 2)
+		x = -r;
+		while (x <= r)
 		{
-			if (put_pixel(&game->mlx.screen, START_PIXEL_X + px + x,
-					START_PIXEL_Y + py + y, color))
-				return (-1);
+			if (x * x + y * y <= r * r)
+			{
+				if (put_pixel(img, cx + x, cy + y, 0x528697))
+					return (-1);
+			}
 			x++;
 		}
 		y++;
@@ -87,15 +58,72 @@ int	draw_player_on_the_map(t_game *game, int color)
 	return (0);
 }
 
-void	init_fov(t_game *game, t_fov **fov)
+// Bresenham line
+// C’est le cœur de Bresenham :
+// On double l’erreur (e2).
+// Si e2 >= dy, alors on avance en x.
+// Si e2 <= dx, alors on avance en y.
+// L’erreur est mise à jour à chaque fois,
+// pour "savoir" si on doit monter ou descendre au prochain pixel.
+// C’est ce qui fait que la ligne est continue, bien droite et
+// sans trous, peu importe son inclinaison.
+int	draw_line_loop(t_img *img, t_line *ln)
 {
-	*fov = &game->mini_map_fov;
-	(*fov)->range = 50.0;
-	(*fov)->px = game->config.player.pos.x * CELL_SIZE;
-	(*fov)->py = game->config.player.pos.y * CELL_SIZE;
-	(*fov)->player_angle = atan2(game->config.player.dir.y,
-			game->config.player.dir.x);
-	(*fov)->start_angle = (*fov)->player_angle - (FOV / 2.0);
-	(*fov)->end_angle = (*fov)->player_angle + (FOV / 2.0);
-	(*fov)->step = 0.01;
+	int	e2;
+
+	while (1)
+	{
+		if (put_pixel(img, ln->x0 + 4, ln->y0 + 4, ln->color))
+			return (-1);
+		if (ln->x0 == ln->x1 && ln->y0 == ln->y1)
+			break ;
+		e2 = 2 * ln->err;
+		if (e2 >= ln->dy)
+		{
+			ln->err += ln->dy;
+			ln->x0 += ln->sx;
+		}
+		if (e2 <= ln->dx)
+		{
+			ln->err += ln->dx;
+			ln->y0 += ln->sy;
+		}
+	}
+	return (0);
+}
+
+int	draw_line(t_img *img, t_line *ln)
+{
+	ln->dx = abs(ln->x1 - ln->x0);
+	ln->dy = -abs(ln->y1 - ln->y0);
+	ln->err = ln->dx + ln->dy;
+	if (ln->x0 < ln->x1)
+		ln->sx = 1;
+	else
+		ln->sx = -1;
+	if (ln->y0 < ln->y1)
+		ln->sy = 1;
+	else
+		ln->sy = -1;
+	if (draw_line_loop(img, ln))
+		return (-1);
+	return (0);
+}
+
+int	draw_line_(t_game *game, int center_x, int center_y)
+{
+	int		dir_x;
+	int		dir_y;
+	t_line	line_to_draw;
+
+	dir_x = (int)(game->config.player.dir.x * 15);
+	dir_y = (int)(game->config.player.dir.y * 15);
+	line_to_draw.x0 = center_x;
+	line_to_draw.y0 = center_y;
+	line_to_draw.x1 = center_x + dir_x;
+	line_to_draw.y1 = center_y + dir_y;
+	line_to_draw.color = 0xFF0000;
+	if (draw_line(&game->mlx.screen, &line_to_draw))
+		return (-1);
+	return (0);
 }
