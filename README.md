@@ -47,10 +47,12 @@ Ce projet permet d'approfondir :
 ```text
 .
 ├── includes/
+├── sprites/
+├── maps/
 ├── src/
 ├── textures/
-├── maps/
-├── libft/
+├── src_bonus/
+├── utils/
 ├── Makefile
 └── README.md
 ```
@@ -62,7 +64,7 @@ Ce projet permet d'approfondir :
 ### Cloner le dépôt
 
 ```bash
-git clone https://github.com/<username>/cub3d.git
+git clone https://github.com/b-kolani/cub3d.git
 cd cub3d
 ```
 
@@ -132,18 +134,6 @@ Légende :
 * `1` : Mur
 * `0` : Espace libre
 * `N`, `S`, `E`, `W` : Position et orientation du joueur
-
----
-
-## 📸 Captures d'écran
-
-### Vue de jeu
-
-![Gameplay](screenshots/gameplay.png)
-
-### Exemple de carte
-
-![Map](screenshots/map.png)
 
 ---
 
